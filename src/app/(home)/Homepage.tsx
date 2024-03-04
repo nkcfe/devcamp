@@ -76,8 +76,13 @@ const Homepage = () => {
   const handleSubmit = (data: RegisterInput) => {
     const { password, confirmPassword } = data;
     if (password !== confirmPassword)
-      return toast.error('비밀번호가 일치하지 않습니다.');
-    alert(JSON.stringify(data, null, 4));
+      return toast.error('비밀번호가 일치하지 않습니다.', {
+        autoClose: 2000,
+      });
+    return toast.success(
+      `계정이 생성되었습니다. \n ${JSON.stringify(data, null, 4)}`,
+      { autoClose: 2000 },
+    );
   };
 
   return (
@@ -104,7 +109,7 @@ const Homepage = () => {
                       <FormItem>
                         <FormLabel>이름</FormLabel>
                         <FormControl>
-                          <Input placeholder="아무개" {...field} />
+                          <Input placeholder="르탄이" {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -117,7 +122,7 @@ const Homepage = () => {
                       <FormItem>
                         <FormLabel>이메일</FormLabel>
                         <FormControl>
-                          <Input placeholder="chul@gmail.com" {...field} />
+                          <Input placeholder="rtany@gmail.com" {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -130,7 +135,7 @@ const Homepage = () => {
                       <FormItem>
                         <FormLabel>연락처</FormLabel>
                         <FormControl>
-                          <Input placeholder="01012341234" {...field} />
+                          <Input placeholder="01000000000" {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
