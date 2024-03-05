@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { User } from '@prisma/client';
 import Confetti from 'react-confetti';
 import { Button } from '@/components/ui/button';
@@ -13,12 +13,19 @@ interface HomepageProps {
 
 const Homepage = (props: HomepageProps) => {
   const { user } = props;
+  const [windowWidth, setWindowWidth] = useState(0);
 
-  if (window === undefined) return null;
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setWindowWidth(window.innerWidth);
+    }
+  }, []);
+
+  if (windowWidth === 0) return null;
 
   return (
     <div className="flex flex-col justify-center items-center gap-10">
-      <Confetti width={window.innerWidth} />
+      <Confetti width={windowWidth} />
       <Card className="flex flex-col justify-center items-center space-y-10 p-10">
         <CardHeader>
           <div className="text-8xl font-bold ">🎉</div>
