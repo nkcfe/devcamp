@@ -36,11 +36,13 @@ import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { z } from 'zod';
 import { toast } from 'react-toastify';
+import { useToast } from '@/components/ui/use-toast';
 
 type RegisterInput = z.infer<typeof registerSchema>;
 
 const Homepage = () => {
   const [step, setStep] = useState(0);
+  const { toast } = useToast();
 
   const form = useForm({
     resolver: zodResolver(registerSchema),
@@ -75,14 +77,15 @@ const Homepage = () => {
 
   const handleSubmit = (data: RegisterInput) => {
     const { password, confirmPassword } = data;
-    if (password !== confirmPassword)
-      return toast.error('비밀번호가 일치하지 않습니다.', {
-        autoClose: 2000,
+    if (password !== confirmPassword) {
+      toast({
+        title: '비밀번호가 일치하지 않습니다.',
+        variant: 'destructive',
+        duration: 2000,
       });
-    return toast.success(
-      `계정이 생성되었습니다. \n ${JSON.stringify(data, null, 4)}`,
-      { autoClose: 2000 },
-    );
+      return;
+    }
+    toast({ description: JSON.stringify(data, null, 4) });
   };
 
   return (
