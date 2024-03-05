@@ -16,3 +16,18 @@
 
 3. zod 사용방법 <a href="https://fe-feed.vercel.app/posts/35">블로그 링크</a>
 - 타입스크립트 기반의 스키마 유효성 검사 라이브러리의 장점 및 사용 방법
+
+
+# 예시 코드 확인해보기 (2일차)
+
+### 학습내용
+1. shadcn/ui를 활용한 다크모드 구현하기 <a href="https://fe-feed.vercel.app/posts/42">블로그 링크</a>
+- Next.js의 themeProvider 사용방법 학습
+- shadcn/ui의 dropdown 메뉴 사용 방법
+
+2. shadcn/ui를 활용한 토스트 구현하기 <a href="https://fe-feed.vercel.app/posts/44">블로그 링크</a>
+- react-toastify에서 shadcn/ui toast로 교체
+
+3. shadcn/ui 분석 - forwardRef 사용방법 및 사용이유 <a href="https://fe-feed.vercel.app/posts/43">블로그 링크</a>
+- forwardRef의 사용 방법 및 사용 이유 학습
+- React의 렌더링 방법과 ref의 연관관계 학습
