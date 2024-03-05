@@ -10,6 +10,13 @@ import prisma from '@/db';
 
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma),
+
+  session: {
+    strategy: 'jwt' as const,
+    maxAge: 60 * 60 * 24,
+    updateAge: 60 * 60 * 2,
+  },
+
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_CLIENT_ID || '',
@@ -60,9 +67,24 @@ export const authOptions: NextAuthOptions = {
       },
     }),
   ],
-  debug: process.env.NODE_ENV === 'development',
-  session: {
-    strategy: 'jwt',
+  pages: {
+    signIn: '/login',
   },
-  secret: process.env.NEXTAUTH_SECRET,
+
+  callbacks: {
+    session: ({ session, token }) => ({
+      ...session,
+      user: {
+        ...session.user,
+        id: token.sub,
+      },
+    }),
+    jwt: async ({ user, token }) => {
+      if (user) {
+        token.sub = user.id;
+      }
+
+      return token;
+    },
+  },
 };
