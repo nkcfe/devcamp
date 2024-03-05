@@ -1,7 +1,9 @@
+'use client';
+
 import { ModeToggle } from '@/components/mode-toggle';
 import { ThemeProvider } from '@/components/theme-provider';
 import { Toaster } from '@/components/ui/toaster';
-import { ToastContainer } from 'react-toastify';
+import { SessionProvider } from 'next-auth/react';
 import 'react-toastify/dist/ReactToastify.css';
 
 interface Props {
@@ -11,8 +13,10 @@ interface Props {
 export const NextProvider = ({ children }: Props) => {
   return (
     <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-      <Toaster />
-      {children}
+      <SessionProvider>
+        <Toaster />
+        {children}
+      </SessionProvider>
     </ThemeProvider>
   );
 };

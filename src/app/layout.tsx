@@ -1,9 +1,12 @@
 import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
+import { Noto_Sans_KR, Ubuntu } from 'next/font/google';
 import './globals.css';
 import { NextLayout, NextProvider } from './provider';
+import { cn } from '@/lib/utils';
 
-const inter = Inter({ subsets: ['latin'] });
+const noto = Noto_Sans_KR({ subsets: ['latin'] });
+
+const ubuntu = Ubuntu({ weight: ['400', '500', '700'], subsets: ['latin'] });
 
 export const metadata: Metadata = {
   title: 'Create Next App',
@@ -17,7 +20,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko">
-      <body className={inter.className}>
+      <body className={cn(noto.className, ubuntu.className)}>
         <NextProvider>
           <NextLayout>{children}</NextLayout>
         </NextProvider>
