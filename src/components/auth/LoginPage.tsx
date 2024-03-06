@@ -85,7 +85,7 @@ const LoginPage = () => {
           <CardTitle>Welcome Back!</CardTitle>
           <CardDescription>Sign in to your account</CardDescription>
           <CardContent className="pt-4">
-            <Social />
+            <Social isLoading={isLoading} setIsLoading={setIsLoading} />
             <HorizonLine />
             <Form {...form}>
               <form

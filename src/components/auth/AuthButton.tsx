@@ -10,7 +10,7 @@ interface AuthButtonProps {
 const AuthButton = (props: AuthButtonProps) => {
   const { isLoading, type } = props;
   return (
-    <div className="pt-6 w-full px-1">
+    <div className="w-full px-1 pt-6">
       <Button
         type="submit"
         className="w-full"

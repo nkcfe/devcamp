@@ -24,9 +24,9 @@ const Homepage = (props: HomepageProps) => {
   if (windowWidth === 0) return null;
 
   return (
-    <div className="flex flex-col justify-center items-center gap-10">
+    <div className="flex flex-col items-center justify-center gap-10">
       <Confetti width={windowWidth} />
-      <Card className="flex flex-col justify-center items-center space-y-10 p-10">
+      <Card className="flex flex-col items-center justify-center space-y-10 p-10">
         <CardHeader>
           <div className="text-8xl font-bold ">🎉</div>
         </CardHeader>
