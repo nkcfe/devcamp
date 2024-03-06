@@ -79,6 +79,7 @@ export const authOptions: NextAuthOptions = {
         id: token.sub,
       },
     }),
+    
     jwt: async ({ user, token }) => {
       if (user) {
         token.sub = user.id;

@@ -1,6 +1,7 @@
 # 회원가입 폼 구현해보기 (1일차)
 
 ### 배포 서버
+로그인 회원가입 페이지 구현 완료 (03. 06)
 <a href="https://devcamp-two.vercel.app/">vercel 배포 링크</a>
 
 ### 학습 내용
@@ -31,3 +32,34 @@
 3. shadcn/ui 분석 - forwardRef 사용방법 및 사용이유 <a href="https://fe-feed.vercel.app/posts/43">블로그 링크</a>
 - forwardRef의 사용 방법 및 사용 이유 학습
 - React의 렌더링 방법과 ref의 연관관계 학습
+
+
+# 회원가입 폼 구현해보기 (3일차)
+
+### 학습내용
+1. Next.js + Prisma + PostgreSQL 데이터 베이스 연결하기 <a href="https://fe-feed.vercel.app/posts/45">블로그 링크</a>
+- Next.js의 서버리스 특성을 살려 풀스택 웹페이지를 만드는 방법 학습
+
+2. Next.js의 API Route 학습 <a href="https://fe-feed.vercel.app/posts/46">블로그 링크</a>
+- 핵심 기능 및 단점 학습
+- page router & app router 차이점 학습
+
+3. 인증, 인가, 쿠키, 세션, JWT 토큰 학습 <a href="https://fe-feed.vercel.app/posts/48">블로그 링크</a>
+- 인증과 인가의 차이점
+- 인증 방식의 종류와 장단점 (쿠키, 세션, 토큰) 
+- JWT 토큰의 개념과 구조, 작동 방법 및 장단점 학습
+- Refresh 토큰의 역할 학습
+
+4. Access Token & Refresh Token <a href="https://fe-feed.vercel.app/posts/50">블로그 링크</a>
+- 함께 사용하게 된 배경과 사용 프로세스 학습
+- Refresh 토큰의 안정성과 추가적인 보안방법 Refresh Token Rotate 학습
+
+5. bcrypt로 비밀번호 해싱 <a href="https://fe-feed.vercel.app/posts/51">블로그 링크</a>
+- 해싱과 솔팅의 개념
+- bcrypt의 작동 방식
+- 라이브러리를 활용한 적용
+
+6. Next-Auth <a href="https://fe-feed.vercel.app/posts/47">블로그 링크1</a><a href="https://fe-feed.vercel.app/posts/49">블로그 링크2</a>
+- Next Auth의 인증 방식과 특징과 작동 방식 학습
+- Next Auth를 활용한 소셜로그인 (구글, 깃허브, 네이버) 및 Credential 로그인 구현
+- 미들웨어를 활용하는 방법
