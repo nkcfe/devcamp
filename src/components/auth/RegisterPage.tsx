@@ -98,7 +98,7 @@ const RegisterPage = () => {
           <CardTitle>Welcome</CardTitle>
           <CardDescription>Create a new account</CardDescription>
           <CardContent className="pt-4">
-            <Social isLoading={isLoading} setIsLoading={setIsLoading} />
+            <Social />
             <HorizonLine />
             <Form {...form}>
               <form
