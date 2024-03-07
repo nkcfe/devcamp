@@ -6,6 +6,7 @@ import { User } from '@prisma/client';
 import Banner from '@/components/home/Banner';
 import axios from 'axios';
 import ProductList from '@/components/home/ProductList';
+import CarouselInfo from '@/components/home/CarouselInfo';
 
 interface HomepageProps {
   user: User | null;
@@ -35,6 +36,9 @@ const Homepage = (props: HomepageProps) => {
       <Banner />
       <div className="mb-40 grid auto-cols-fr grid-cols-2 items-center justify-center gap-8 md:grid-cols-3">
         <ProductList productItems={productItems} />
+      </div>
+      <div className="mb-40 w-full">
+        <CarouselInfo />
       </div>
     </div>
   );
