@@ -1,7 +1,10 @@
+import { getProducts } from '../utils/fetch';
 import Homepage from './Homepage';
 import getCurrentUser from './actions/getUser';
 
 export default async function Home() {
   const user = await getCurrentUser();
-  return <Homepage user={user} />;
+  const products = await getProducts();
+
+  return <Homepage user={user} products={products} />;
 }

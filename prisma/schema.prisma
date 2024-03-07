@@ -62,12 +62,11 @@ model Cart {
 }
 
 model Product {
-  id          String @id @default(cuid())
-  name        String
-  description String
-  price       Float
-  image       String
-  carts       Cart[]
+  id    String @id @default(cuid())
+  name  String
+  price Float
+  image String
+  carts Cart[]
 }
 
 model VerificationToken {

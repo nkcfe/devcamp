@@ -1,26 +1,22 @@
+import { ProductType } from '@/module/type';
 import Image from 'next/image';
 import React from 'react';
 
 interface ProductList {
-  productItems: {
-    id: number;
-    name: string;
-    imgSrc: string;
-    price: number;
-  }[];
+  products: ProductType[] | null;
 }
 
 const ProductList = (props: ProductList) => {
-  const { productItems } = props;
+  const { products } = props;
 
-  return productItems.map(({ id, name, imgSrc, price }) => (
+  return products?.map(({ id, name, image, price }) => (
     <article
       key={name}
       className="group flex size-full cursor-pointer flex-col"
     >
       <div className="relative size-96 overflow-hidden">
         <Image
-          src={imgSrc}
+          src={image}
           className="object-cover object-center transition-transform duration-300 ease-in-out group-hover:scale-105"
           fill
           alt={name}
