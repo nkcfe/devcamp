@@ -1,6 +1,6 @@
 'use client';
 
-import { ModeToggle } from '@/components/mode-toggle';
+import NavigationBar from '@/components/NavigationBar';
 import { ThemeProvider } from '@/components/theme-provider';
 import { Toaster } from '@/components/ui/toaster';
 import { SessionProvider } from 'next-auth/react';
@@ -23,8 +23,8 @@ export const NextProvider = ({ children }: Props) => {
 
 export const NextLayout = ({ children }: Props) => {
   return (
-    <main className="relative flex h-screen w-screen items-center justify-center">
-      <ModeToggle className="absolute right-5 top-5" id="1" />
+    <main className="flex h-screen w-screen items-center justify-center">
+      <NavigationBar />
       {children}
     </main>
   );

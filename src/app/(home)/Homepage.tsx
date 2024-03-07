@@ -25,7 +25,7 @@ const Homepage = (props: HomepageProps) => {
 
   return (
     <div className="flex flex-col items-center justify-center gap-10">
-      <Confetti width={windowWidth} />
+      {/* <Confetti width={windowWidth} /> */}
       <Card className="flex flex-col items-center justify-center space-y-10 p-10">
         <CardHeader>
           <div className="text-8xl font-bold ">🎉</div>
