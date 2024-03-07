@@ -1,0 +1,38 @@
+[
+  {
+    "id": 1,
+    "imgSrc": "/asset/glass_cup.jpeg",
+    "name": "glass cup",
+    "price": 18000
+  },
+  {
+    "id": 2,
+    "imgSrc": "/asset/leather_cover.png",
+    "name": "leather cover",
+    "price": 28000
+  },
+  {
+    "id": 3,
+    "imgSrc": "/asset/monday_hand_drip.png",
+    "name": "monday hand drip",
+    "price": 39000
+  },
+  {
+    "id": 4,
+    "imgSrc": "/asset/original_coffee_beens.png",
+    "name": "original coffee beens",
+    "price": 18000
+  },
+  {
+    "id": 5,
+    "imgSrc": "/asset/signature_coffee_beens.png",
+    "name": "signature coffee beens",
+    "price": 18000
+  },
+  {
+    "id": 6,
+    "imgSrc": "/asset/single_origin.png",
+    "name": "single origin",
+    "price": 20000
+  }
+]
