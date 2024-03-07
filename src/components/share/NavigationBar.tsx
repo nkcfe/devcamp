@@ -16,7 +16,7 @@ const NavigationBar = () => {
   const router = useRouter();
 
   return (
-    <div className="container fixed top-0 flex h-14 w-full items-center justify-between bg-background">
+    <div className="container fixed top-0 z-30 flex h-14 w-full items-center justify-between bg-background">
       <div className="text-xl">
         <Link href="/">Monday Coffee</Link>
       </div>

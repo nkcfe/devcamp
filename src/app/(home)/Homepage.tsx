@@ -7,6 +7,7 @@ import Banner from '@/components/home/Banner';
 import axios from 'axios';
 import ProductList from '@/components/home/ProductList';
 import CarouselInfo from '@/components/home/CarouselInfo';
+import Footer from '@/components/home/Footer';
 
 interface HomepageProps {
   user: User | null;
@@ -29,8 +30,6 @@ const Homepage = (props: HomepageProps) => {
     fetchProductData();
   }, []);
 
-  console.log(productItems);
-
   return (
     <div className="flex flex-col items-center justify-start">
       <Banner />
@@ -40,6 +39,7 @@ const Homepage = (props: HomepageProps) => {
       <div className="mb-40 w-full">
         <CarouselInfo />
       </div>
+      <Footer />
     </div>
   );
 };
