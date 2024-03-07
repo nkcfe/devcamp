@@ -26,7 +26,6 @@ import { Button } from '@/components/ui/button';
 import { z } from 'zod';
 import { useToast } from '@/components/ui/use-toast';
 import Social from '../../components/auth/Social';
-import Guide from '../../components/auth/Guide';
 import { AiOutlineEye } from 'react-icons/ai';
 import { AiOutlineEyeInvisible } from 'react-icons/ai';
 import { signIn } from 'next-auth/react';
@@ -80,7 +79,7 @@ const LoginPage = () => {
 
   return (
     <div className="w-[380px]">
-      <Card>
+      <Card className="border-none">
         <CardHeader>
           <CardTitle>Welcome Back!</CardTitle>
           <CardDescription>Sign in to your account</CardDescription>
@@ -140,7 +139,6 @@ const LoginPage = () => {
                 <AuthButton isLoading={isLoading} type="login" />
               </form>
             </Form>
-            <Guide type="login" />
           </CardContent>
         </CardHeader>
       </Card>
