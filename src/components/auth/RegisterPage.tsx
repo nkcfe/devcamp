@@ -26,13 +26,11 @@ import { Button } from '@/components/ui/button';
 import { z } from 'zod';
 import { useToast } from '@/components/ui/use-toast';
 import Social from '../../components/auth/Social';
-import Guide from '../../components/auth/Guide';
 import { AiOutlineEye } from 'react-icons/ai';
 import { AiOutlineEyeInvisible } from 'react-icons/ai';
 import axios from 'axios';
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import { ScaleLoader } from 'react-spinners';
 import HorizonLine from '@/components/auth/HorizonLine';
 import AuthButton from './AuthButton';
 
@@ -93,7 +91,7 @@ const RegisterPage = () => {
 
   return (
     <div className="w-[380px]">
-      <Card className="">
+      <Card className="border-none">
         <CardHeader>
           <CardTitle>Welcome</CardTitle>
           <CardDescription>Create a new account</CardDescription>
@@ -183,7 +181,6 @@ const RegisterPage = () => {
                 <AuthButton isLoading={isLoading} type="register" />
               </form>
             </Form>
-            <Guide type="register" />
           </CardContent>
         </CardHeader>
       </Card>
