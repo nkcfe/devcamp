@@ -1,5 +1,6 @@
 import { ProductType } from '@/module/type';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 import React from 'react';
 
 interface ProductList {
@@ -8,11 +9,15 @@ interface ProductList {
 
 const ProductList = (props: ProductList) => {
   const { products } = props;
+  const router = useRouter();
 
   return products?.map(({ id, name, image, price }) => (
     <article
       key={name}
       className="group flex size-full cursor-pointer flex-col"
+      onClick={() => {
+        router.push(`/product/${id}`);
+      }}
     >
       <div className="relative size-96 overflow-hidden">
         <Image

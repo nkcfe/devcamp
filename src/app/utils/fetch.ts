@@ -16,3 +16,15 @@ export const getProducts = cache(async () => {
 
   return products;
 });
+
+export const getProduct = cache(async (id: string) => {
+  const product = await prisma.product.findUnique({
+    where: {
+      id: id,
+    },
+  });
+
+  if (!product) return null;
+
+  return product;
+});
