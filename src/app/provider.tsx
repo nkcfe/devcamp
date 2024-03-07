@@ -23,8 +23,8 @@ export const NextProvider = ({ children }: Props) => {
 
 export const NextLayout = ({ children }: Props) => {
   return (
-    <main className="flex justify-center items-center w-screen h-screen relative">
-      <ModeToggle className="absolute top-5 right-5" id="1" />
+    <main className="relative flex h-screen w-screen items-center justify-center">
+      <ModeToggle className="absolute right-5 top-5" id="1" />
       {children}
     </main>
   );
