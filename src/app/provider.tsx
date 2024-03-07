@@ -1,7 +1,7 @@
 'use client';
 
-import NavigationBar from '@/components/NavigationBar';
-import { ThemeProvider } from '@/components/theme-provider';
+import NavigationBar from '@/components/share/NavigationBar';
+import { ThemeProvider } from '@/components/share/theme-provider';
 import { Toaster } from '@/components/ui/toaster';
 import { SessionProvider } from 'next-auth/react';
 import 'react-toastify/dist/ReactToastify.css';
@@ -23,7 +23,7 @@ export const NextProvider = ({ children }: Props) => {
 
 export const NextLayout = ({ children }: Props) => {
   return (
-    <main className="flex h-screen w-screen items-center justify-center">
+    <main className="container">
       <NavigationBar />
       {children}
     </main>
