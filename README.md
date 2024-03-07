@@ -1,8 +1,8 @@
-# 회원가입 폼 구현해보기 (1일차)
-
-### 배포 서버
-로그인 회원가입 페이지 구현 완료 (03. 06)
+# 배포 서버
+쇼핑몰 + 회원가입 + 로그인 구현 진행중 (03. 07 업데이트)
 <a href="https://devcamp-two.vercel.app/">vercel 배포 링크</a>
+
+## 회원가입 폼 구현해보기 (1일차)
 
 ### 학습 내용
 1. tailwind 유틸 함수 세팅 방법 <a href="https://fe-feed.vercel.app/posts/33">블로그 링크</a>
@@ -19,7 +19,7 @@
 - 타입스크립트 기반의 스키마 유효성 검사 라이브러리의 장점 및 사용 방법
 
 
-# 예시 코드 확인해보기 (2일차)
+## 예시 코드 확인해보기 (2일차)
 
 ### 학습내용
 1. shadcn/ui를 활용한 다크모드 구현하기 <a href="https://fe-feed.vercel.app/posts/42">블로그 링크</a>
@@ -34,7 +34,7 @@
 - React의 렌더링 방법과 ref의 연관관계 학습
 
 
-# 회원가입 폼 구현해보기 (3일차)
+## 회원가입 폼 구현해보기 (3일차)
 
 ### 학습내용
 1. Next.js + Prisma + PostgreSQL 데이터 베이스 연결하기 <a href="https://fe-feed.vercel.app/posts/45">블로그 링크</a>
@@ -63,3 +63,23 @@
 - Next Auth의 인증 방식과 특징과 작동 방식 학습
 - Next Auth를 활용한 소셜로그인 (구글, 깃허브, 네이버) 및 Credential 로그인 구현
 - 미들웨어를 활용하는 방법
+
+
+## 쇼핑몰 구현하기 (4일차)
+
+### 학습내용
+1. shadcn을 이용한 쇼핑몰 페이지 스타일링
+아래 컴포넌트 활용
+- Dropdown
+- Drawer
+- Dialog
+- Carousel
+- Tab
+
+2. Prisma + Supabase로 Data Seed 작업 진행
+- 하드코딩한 목업데이터를 데이터베이스로 이관작업
+
+3. SSG, SSR, cache를 학습 및 활용해보기
+- 상세페이지 product : 데이터가 변동될 일이 거의 없기 떄문에 SSG를 활용
+- 메인페이지 products : 데이터가 추가되거나 삭제될 일이 있기 때문에 SSR을 활용.
+- React Server Component에서 도입된 cache로 최적화 진행
