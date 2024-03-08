@@ -15,7 +15,6 @@ import { FiShoppingCart, FiUser } from 'react-icons/fi';
 import { BiSolidCoffeeBean } from 'react-icons/bi';
 import { Shadows_Into_Light } from 'next/font/google';
 import { Dialog, DialogContent, DialogTrigger } from '../ui/dialog';
-import LoginPage from '../auth/LoginPage';
 import AuthPage from '../auth/AuthPage';
 
 const shadowIntoLight = Shadows_Into_Light({
