@@ -14,16 +14,19 @@ import {
 import { useCartStore } from '@/store';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
+import CartDialog from './CartDialog';
 
 interface DrawerPageProps {
   productId: string;
   quantity: number;
   addQuantity: () => void;
   subtractQuantity: () => void;
+  handleOpen: () => void;
 }
 
 const DrawerPage = (props: DrawerPageProps) => {
-  const { productId, quantity, addQuantity, subtractQuantity } = props;
+  const { productId, quantity, addQuantity, subtractQuantity, handleOpen } =
+    props;
   const { status } = useSession();
   const router = useRouter();
   const { addToCart } = useCartStore();
@@ -39,7 +42,7 @@ const DrawerPage = (props: DrawerPageProps) => {
     }
 
     if (status === 'unauthenticated') {
-      router.push('/login');
+      handleOpen();
     }
   };
 
@@ -88,11 +91,7 @@ const DrawerPage = (props: DrawerPageProps) => {
           </div>
           <DrawerFooter>
             <Button onClick={handleBuyNow}>바로구매</Button>
-            <DrawerClose asChild>
-              <Button variant="outline" onClick={handleAddToCart}>
-                장바구니
-              </Button>
-            </DrawerClose>
+            <CartDialog handleAddToCart={handleAddToCart} />
           </DrawerFooter>
         </div>
       </DrawerContent>
