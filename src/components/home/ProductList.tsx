@@ -11,12 +11,12 @@ const ProductList = (props: ProductList) => {
   const { products } = props;
   const router = useRouter();
 
-  return products?.map(({ id, name, image, price }) => (
+  return products?.map(({ productId, name, image, price }) => (
     <article
       key={name}
       className="group flex size-full cursor-pointer flex-col"
       onClick={() => {
-        router.push(`/product/${id}`);
+        router.push(`/product/${productId}`);
       }}
     >
       <div className="relative size-96 overflow-hidden">

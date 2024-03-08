@@ -15,7 +15,7 @@ import { set } from 'zod';
 const MAX_COUNT = 10;
 const MIN_COUNT = 1;
 
-const DetailPage = ({ id, name, price, image }: ProductType) => {
+const DetailPage = ({ productId, name, price, image }: ProductType) => {
   const [quantity, setQuantity] = useState(MIN_COUNT);
   const [open, setOpen] = useState(false);
   const { toast } = useToast();
@@ -59,7 +59,7 @@ const DetailPage = ({ id, name, price, image }: ProductType) => {
           {(price * quantity).toLocaleString()}원
         </div>
         <DrawerPage
-          productId={id}
+          productId={productId}
           quantity={quantity}
           addQuantity={addQuantity}
           subtractQuantity={subtractQuantity}

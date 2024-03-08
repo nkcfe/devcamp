@@ -1,10 +1,5 @@
-import { ProductType } from '@/module/type';
+import { ItemType } from '@/module/type';
 import { create } from 'zustand';
-
-interface ItemType {
-  productId: string;
-  quantity: number;
-}
 
 interface CartStore {
   items: ItemType[];

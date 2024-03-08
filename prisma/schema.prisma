@@ -14,7 +14,7 @@ datasource db {
 }
 
 model Account {
-  id                String  @id @default(cuid())
+  accountId         String  @id @default(cuid())
   userId            String
   type              String
   provider          String
@@ -33,7 +33,7 @@ model Account {
 }
 
 model Session {
-  id           String   @id @default(cuid())
+  sessionId    String   @id @default(cuid())
   sessionToken String   @unique
   userId       String
   expires      DateTime
@@ -47,26 +47,36 @@ model User {
   emailVerified  DateTime?
   hashedPassword String?
   image          String?
+  cartId         String?   @unique
   accounts       Account[]
   sessions       Session[]
-  Cart           Cart[]
+  cart           Cart?
 }
 
 model Cart {
-  id        String  @id @default(cuid())
-  userId    String
-  productId String
-  quantity  Int
-  user      User    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  cartId    String     @id @default(cuid())
+  userId    String     @unique
+  user      User       @relation(fields: [userId], references: [id])
+  cartItems CartItem[]
+}
+
+model CartItem {
+  cartItemId String @id @default(cuid())
+  cartId     String
+  productId  String
+  quantity   Int
+
+  cart    Cart    @relation(fields: [cartId], references: [cartId])
+  product Product @relation(fields: [productId], references: [productId])
 }
 
 model Product {
-  id    String @id @default(cuid())
-  name  String
-  price Float
-  image String
-  carts Cart[]
+  productId String @id @default(cuid())
+  name      String
+  price     Float
+  image     String
+
+  cartItems CartItem[]
 }
 
 model VerificationToken {

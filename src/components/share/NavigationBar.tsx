@@ -13,12 +13,13 @@ import Link from 'next/link';
 import { ModeToggle } from './mode-toggle';
 import { FiShoppingCart, FiUser } from 'react-icons/fi';
 import { BiSolidCoffeeBean } from 'react-icons/bi';
-import { Shadows_Into_Light } from 'next/font/google';
+import { Truculenta } from 'next/font/google';
 import { Dialog, DialogContent, DialogTrigger } from '../ui/dialog';
 import AuthPage from '../auth/AuthPage';
+import { cn } from '@/lib/utils';
 
-const shadowIntoLight = Shadows_Into_Light({
-  weight: ['400'],
+const truculenta = Truculenta({
+  weight: ['400', '500', '600', '700', '800', '900'],
   subsets: ['latin'],
 });
 
@@ -31,7 +32,9 @@ const NavigationBar = () => {
       <div className="text-xl">
         <Link href="/" className="flex items-center justify-center gap-2">
           <BiSolidCoffeeBean />
-          <div className={shadowIntoLight.className}>Monday Coffee</div>
+          <div className={cn('font-bold', truculenta.className)}>
+            Monday Coffee
+          </div>
         </Link>
       </div>
       <div className="flex gap-2">
