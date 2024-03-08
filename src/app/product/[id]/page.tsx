@@ -1,7 +1,7 @@
 import { getProduct } from '@/app/utils/fetch';
 import prisma from '@/db';
 import { notFound } from 'next/navigation';
-import DetailPage from './DetailPage';
+import DetailPage from '../../../components/detail/DetailPage';
 
 interface ProcuctProps {
   params: { id: string };
