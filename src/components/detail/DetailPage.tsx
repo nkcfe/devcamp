@@ -6,11 +6,9 @@ import { ProductType } from '@/module/type';
 import Image from 'next/image';
 import React, { useState } from 'react';
 import DrawerPage from './DrawerPage';
-import TabPage from './TabPage';
 import { Dialog, DialogContent, DialogTrigger } from '../ui/dialog';
 import { Button } from '../ui/button';
 import AuthPage from '../auth/AuthPage';
-import { set } from 'zod';
 
 const MAX_COUNT = 10;
 const MIN_COUNT = 1;

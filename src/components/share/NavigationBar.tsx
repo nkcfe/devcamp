@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 import { Button } from '../ui/button';
 import {
@@ -25,7 +27,7 @@ const truculenta = Truculenta({
 
 const NavigationBar = () => {
   const router = useRouter();
-  const { status } = useSession();
+  const { status, data } = useSession();
 
   return (
     <div className="container fixed top-0 z-30 flex h-14 w-full items-center justify-between bg-background">

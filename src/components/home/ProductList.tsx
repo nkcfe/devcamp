@@ -24,6 +24,8 @@ const ProductList = (props: ProductList) => {
           src={image}
           className="object-cover object-center transition-transform duration-300 ease-in-out group-hover:scale-105"
           fill
+          sizes="100% 100%"
+          priority
           alt={name}
         />
       </div>
