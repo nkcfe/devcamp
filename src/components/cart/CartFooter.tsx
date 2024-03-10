@@ -1,5 +1,6 @@
 import React from 'react';
 import { Button } from '../ui/button';
+import { useRouter } from 'next/navigation';
 
 interface CartFooterProps {
   totalQuantity: number;
@@ -8,6 +9,7 @@ interface CartFooterProps {
 
 const CartFooter = (props: CartFooterProps) => {
   const { totalQuantity, totalPrice } = props;
+  const router = useRouter();
 
   return (
     <div className="fixed bottom-0 z-[99] flex h-20 w-screen items-center justify-end gap-3 border-t bg-background pr-6">
@@ -15,7 +17,7 @@ const CartFooter = (props: CartFooterProps) => {
       <div className="mr-4 text-2xl font-bold">
         {totalPrice.toLocaleString()}원
       </div>
-      <Button>주문하기</Button>
+      <Button onClick={() => router.push('/pay')}>주문하기</Button>
     </div>
   );
 };
