@@ -9,7 +9,7 @@ export async function GET(request: Request) {
     // 세션 확인
     const session = await getServerSession(authOptions);
     if (!session) {
-      return new Response('Not logged in', { status: 401 });
+      return NextResponse.json([], { status: 200 });
     }
 
     // 유저의 카트 정보 가져오기
@@ -18,7 +18,7 @@ export async function GET(request: Request) {
       select: { cartId: true },
     });
     if (!user || !user.cartId) {
-      return new Response('User cart not found', { status: 404 });
+      return NextResponse.json([], { status: 200 });
     }
 
     const cart = await prisma.cart.findUnique({
@@ -26,8 +26,12 @@ export async function GET(request: Request) {
       include: { cartItems: { include: { product: true } } },
     });
 
+    const sortedCart = cart?.cartItems.sort(
+      (a, b) => a.createdAt.getDate() - b.createdAt.getDate(),
+    );
+
     // 응답 전송
-    return new Response(JSON.stringify(cart), { status: 200 });
+    return new Response(JSON.stringify(sortedCart), { status: 200 });
   } catch (error) {
     console.error('Error fetching user cart:', error);
     return new Response('Internal server error', { status: 500 });
@@ -109,7 +113,45 @@ export async function POST(request: Request) {
 }
 
 export async function PUT(request: Request) {
-  return new Response('Hello, world!');
+  const body = await request.json();
+  const { productId, customQuantity } = body;
+
+  const session = await getServerSession(authOptions);
+  if (!session) {
+    return new Response('Not logged in', { status: 401 });
+  }
+
+  const user = await prisma.user.findUnique({
+    where: { email: session.user?.email as string },
+    select: { cartId: true },
+  });
+
+  if (!user || !user.cartId) {
+    return new Response('User cart not found', { status: 404 });
+  }
+
+  const cartItem = await prisma.cartItem.findFirst({
+    where: {
+      cartId: user.cartId,
+      productId,
+    },
+  });
+
+  try {
+    if (cartItem) {
+      const updatedCartItem = await prisma.cartItem.update({
+        where: { cartItemId: cartItem.cartItemId },
+        data: { quantity: { increment: customQuantity } },
+      });
+
+      return new Response(JSON.stringify(updatedCartItem), { status: 200 });
+    } else {
+      return new Response('Cart item not found', { status: 404 });
+    }
+  } catch (error) {
+    console.error('Error updating cart item:', error);
+    return new Response('Internal server error', { status: 500 });
+  }
 }
 
 export async function DELETE(request: Request) {
