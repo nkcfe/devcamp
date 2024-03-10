@@ -2,12 +2,15 @@
 
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import Image from 'next/image';
 import OrderProductionInfo from './OrderProductionInfo';
 import OrdererInfo from './OrdererInfo';
 import { useSession } from 'next-auth/react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { ordererSchema } from '@/validators/orderer';
 
 const PayPage = () => {
   const { data } = useSession();
@@ -21,6 +24,22 @@ const PayPage = () => {
     },
   });
 
+  const OrderForm = useForm({
+    resolver: zodResolver(ordererSchema),
+    defaultValues: {
+      name: user?.name || '',
+      phone: '',
+      email: user?.email || '',
+    },
+  });
+
+  useEffect(() => {
+    if (user?.name && user?.email) {
+      OrderForm.setValue('name', user?.name);
+      OrderForm.setValue('email', user?.email);
+    }
+  }, [OrderForm, user?.email, user?.name]);
+
   if (isLoading) return <div>Loading...</div>;
 
   return (
@@ -31,7 +50,7 @@ const PayPage = () => {
           <div className="col-span-2">
             <div className="flex flex-col gap-6">
               <OrderProductionInfo cartItems={cartItems} />
-              <OrdererInfo user={user} />
+              <OrdererInfo user={user} OrderForm={OrderForm} />
             </div>
           </div>
           <div className="bg-gray-500">ㅁㄴㅇㄹㅁㄴㅇㄹ</div>
