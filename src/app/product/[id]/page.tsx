@@ -10,10 +10,10 @@ interface ProcuctProps {
 export const generateStaticParams = async () => {
   const response = await prisma.product.findMany({
     select: {
-      id: true,
+      productId: true,
     },
   });
-  return response.map(({ id }) => ({ params: { id: id.toString() } }));
+  return response.map(({ productId }) => ({ params: { id: productId.toString() } }));
 };
 
 export default async function Product({ params }: ProcuctProps) {

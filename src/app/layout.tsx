@@ -18,7 +18,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko">
-      <body className={cn(noto.className)}>
+      <body className={noto.className}>
         <NextProvider>
           <NextLayout>{children}</NextLayout>
         </NextProvider>

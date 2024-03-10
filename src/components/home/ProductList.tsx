@@ -11,12 +11,12 @@ const ProductList = (props: ProductList) => {
   const { products } = props;
   const router = useRouter();
 
-  return products?.map(({ id, name, image, price }) => (
+  return products?.map(({ productId, name, image, price }) => (
     <article
       key={name}
       className="group flex size-full cursor-pointer flex-col"
       onClick={() => {
-        router.push(`/product/${id}`);
+        router.push(`/product/${productId}`);
       }}
     >
       <div className="relative size-96 overflow-hidden">
@@ -24,6 +24,8 @@ const ProductList = (props: ProductList) => {
           src={image}
           className="object-cover object-center transition-transform duration-300 ease-in-out group-hover:scale-105"
           fill
+          sizes="100% 100%"
+          priority
           alt={name}
         />
       </div>

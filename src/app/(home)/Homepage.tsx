@@ -22,7 +22,7 @@ const Homepage = (props: HomepageProps) => {
   return (
     <div className="flex flex-col items-center justify-start">
       <Banner />
-      <div className="mb-40 grid auto-cols-fr grid-cols-2 items-center justify-center gap-8 md:grid-cols-3">
+      <div className="mb-40 grid auto-cols-fr grid-cols-1  items-center justify-center gap-8 md:grid-cols-2 lg:grid-cols-3">
         <ProductList products={products} />
       </div>
       <div className="mb-40 w-full">

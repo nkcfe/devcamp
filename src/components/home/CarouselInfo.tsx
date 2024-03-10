@@ -1,11 +1,5 @@
 import React from 'react';
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from '../ui/carousel';
+import { Carousel, CarouselContent, CarouselItem } from '../ui/carousel';
 import Image from 'next/image';
 import Autoplay from 'embla-carousel-autoplay';
 
@@ -34,13 +28,18 @@ const CarouselInfo = () => {
         {ImageArray.map((img, index) => (
           <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/3">
             <div className="relative h-[600px]">
-              <Image src={img} fill alt="img" />
+              <Image
+                src={img}
+                fill
+                alt="img"
+                sizes="100% 100%"
+                priority
+                className="object-cover"
+              />
             </div>
           </CarouselItem>
         ))}
       </CarouselContent>
-      <CarouselPrevious />
-      <CarouselNext />
     </Carousel>
   );
 };

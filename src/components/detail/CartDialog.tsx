@@ -2,11 +2,7 @@ import React from 'react';
 import {
   AlertDialog,
   AlertDialogAction,
-  AlertDialogCancel,
   AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '../ui/alert-dialog';
@@ -14,19 +10,15 @@ import { Button } from '../ui/button';
 import { useRouter } from 'next/navigation';
 
 interface CartDialogProps {
-  handleAddToCart: () => void;
+  isDialogOpen: boolean;
+  handleDialog: () => void;
 }
 
 const CartDialog = (props: CartDialogProps) => {
-  const { handleAddToCart } = props;
+  const { isDialogOpen, handleDialog } = props;
   const router = useRouter();
   return (
-    <AlertDialog>
-      <AlertDialogTrigger>
-        <Button variant="outline" onClick={handleAddToCart} className="w-full">
-          장바구니
-        </Button>
-      </AlertDialogTrigger>
+    <AlertDialog open={isDialogOpen} onOpenChange={handleDialog}>
       <AlertDialogContent className="flex w-[320px] flex-col items-center justify-center">
         <AlertDialogTitle className="mb-10">
           장바구니에 상품이 추가되었습니다.
