@@ -1,8 +1,6 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
-import { UseFormReturn, useForm } from 'react-hook-form';
-import { User } from 'next-auth';
-import { UserType } from '@/module/type';
+import { UseFormReturn } from 'react-hook-form';
 import {
   Form,
   FormControl,
@@ -12,24 +10,14 @@ import {
   FormMessage,
 } from '../ui/form';
 import { Input } from '../ui/Input';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { ordererSchema } from '@/validators/orderer';
+import { OrderType } from '@/validators/orderer';
 
 interface OrdererInfoProps {
-  user: UserType | undefined;
-  OrderForm: UseFormReturn<
-    {
-      name: string;
-      phone: string;
-      email: string;
-    },
-    any,
-    undefined
-  >;
+  OrderForm: UseFormReturn<OrderType, any, undefined>;
 }
 
 const OrdererInfo = (props: OrdererInfoProps) => {
-  const { user, OrderForm } = props;
+  const { OrderForm } = props;
 
   return (
     <Card>
@@ -38,7 +26,7 @@ const OrdererInfo = (props: OrdererInfoProps) => {
       </CardHeader>
       <CardContent className="mt-2 p-6 pt-0">
         <Form {...OrderForm}>
-          <form>
+          <div className="flex flex-col gap-4">
             <div className="flex w-full">
               <FormField
                 name="name"
@@ -80,7 +68,7 @@ const OrdererInfo = (props: OrdererInfoProps) => {
                 </FormItem>
               )}
             />
-          </form>
+          </div>
         </Form>
       </CardContent>
     </Card>

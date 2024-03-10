@@ -1,16 +1,14 @@
-import React, { memo, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from '../ui/form';
 import { Input } from '../ui/Input';
-import { useForm } from 'react-hook-form';
 import { Button } from '../ui/button';
 import {
   Select,
@@ -19,6 +17,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from '../ui/select';
+import { Dialog, DialogContent, DialogHeader } from '../ui/dialog';
+import DaumPostcodeEmbed from 'react-daum-postcode';
+import { DialogTitle } from '@radix-ui/react-dialog';
+import { UseFormReturn } from 'react-hook-form';
+import { OrderType } from '@/validators/orderer';
 
 const memoList = [
   '부재 시 경비실에 맡겨주세요.😀',
@@ -26,28 +29,41 @@ const memoList = [
   '부재 시 전화 부탁드립니다.😄',
 ];
 
-const DeliveryInfo = () => {
-  const [isDirectMessage, setIsDirectMessage] = useState(false);
+interface DeliveryInfoProps {
+  OrderForm: UseFormReturn<OrderType, any, undefined>;
+}
 
-  const DeliveryForm = useForm({
-    defaultValues: {
-      name: '',
-      phone: '',
-      address: '',
-      detailAddress: '',
-      postcode: '',
-      deliveryMemo: '',
-    },
-  });
+const DeliveryInfo = (props: DeliveryInfoProps) => {
+  const { OrderForm } = props;
+  const [isDirectMessage, setIsDirectMessage] = useState(false);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+
+  const handleComplete = (data: any) => {
+    let fullAddress = data.address;
+    let extraAddress = '';
+
+    if (data.addressType === 'R') {
+      if (data.bname !== '') {
+        extraAddress += data.bname;
+      }
+      if (data.buildingName !== '') {
+        extraAddress +=
+          extraAddress !== '' ? `, ${data.buildingName}` : data.buildingName;
+      }
+      fullAddress += extraAddress !== '' ? ` (${extraAddress})` : '';
+    }
+    OrderForm.setValue('postcode', data.zonecode);
+    OrderForm.setValue('address', fullAddress);
+  };
 
   useEffect(() => {
-    if (DeliveryForm.watch().deliveryMemo === '직접 입력') {
-      DeliveryForm.setValue('deliveryMemo', '');
+    if (OrderForm.watch().deliveryMemo === '직접 입력') {
+      OrderForm.setValue('deliveryMemo', '');
       setIsDirectMessage(true);
-    } else if (memoList.includes(DeliveryForm.watch().deliveryMemo)) {
+    } else if (memoList.includes(OrderForm.watch().deliveryMemo)) {
       setIsDirectMessage(false);
     }
-  }, [DeliveryForm.watch().deliveryMemo]);
+  }, [OrderForm.watch().deliveryMemo]);
 
   return (
     <Card>
@@ -55,12 +71,12 @@ const DeliveryInfo = () => {
         <CardTitle>배송지 정보</CardTitle>
       </CardHeader>
       <CardContent className="mt-2 p-6 pt-0">
-        <Form {...DeliveryForm}>
-          <form>
+        <Form {...OrderForm}>
+          <div>
             <div className="flex w-full">
               <FormField
-                name="name"
-                control={DeliveryForm.control}
+                name="recipient"
+                control={OrderForm.control}
                 render={({ field }) => (
                   <FormItem className="w-full">
                     <FormLabel>수령자</FormLabel>
@@ -72,8 +88,8 @@ const DeliveryInfo = () => {
                 )}
               />
               <FormField
-                name="phone"
-                control={DeliveryForm.control}
+                name="recipientNumber"
+                control={OrderForm.control}
                 render={({ field }) => (
                   <FormItem className="w-full">
                     <FormLabel>전화번호</FormLabel>
@@ -88,23 +104,30 @@ const DeliveryInfo = () => {
             <div className="mt-2 flex flex-col gap-2">
               <div className="flex items-end">
                 <FormField
-                  name="phone"
-                  control={DeliveryForm.control}
+                  name="postcode"
+                  control={OrderForm.control}
                   render={({ field }) => (
-                    <FormItem className="">
+                    <FormItem>
                       <FormLabel>우편번호</FormLabel>
-                      <FormControl>
-                        <Input placeholder="우편 번호" {...field} />
-                      </FormControl>
+                      <div className="flex gap-1">
+                        <FormControl>
+                          <Input placeholder="우편 번호" {...field} />
+                        </FormControl>
+                        <Button
+                          onClick={() => setIsDialogOpen(true)}
+                          type="button"
+                        >
+                          주소 찾기
+                        </Button>
+                      </div>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
-                <Button>주소 찾기</Button>
               </div>
               <FormField
-                name="phone"
-                control={DeliveryForm.control}
+                name="address"
+                control={OrderForm.control}
                 render={({ field }) => (
                   <FormItem className="w-full">
                     <FormControl>
@@ -115,12 +138,12 @@ const DeliveryInfo = () => {
                 )}
               />
               <FormField
-                name="phone"
-                control={DeliveryForm.control}
+                name="detailAddress"
+                control={OrderForm.control}
                 render={({ field }) => (
                   <FormItem className="w-full">
                     <FormControl>
-                      <Input placeholder="상세정보" {...field} />
+                      <Input placeholder="상세주소" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -129,7 +152,7 @@ const DeliveryInfo = () => {
             </div>
             <div className="mt-2">
               <FormField
-                control={DeliveryForm.control}
+                control={OrderForm.control}
                 name="deliveryMemo"
                 render={({ field }) => (
                   <FormItem>
@@ -162,7 +185,7 @@ const DeliveryInfo = () => {
               <div className="mt-2">
                 <FormField
                   name="deliveryMemo"
-                  control={DeliveryForm.control}
+                  control={OrderForm.control}
                   render={({ field }) => (
                     <FormItem className="w-full">
                       <FormControl>
@@ -171,15 +194,31 @@ const DeliveryInfo = () => {
                           {...field}
                         />
                       </FormControl>
-                      <FormMessage />
                     </FormItem>
                   )}
                 />
               </div>
             )}
-          </form>
+          </div>
         </Form>
       </CardContent>
+      <Dialog
+        open={isDialogOpen}
+        onOpenChange={(open) => setIsDialogOpen(open)}
+      >
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>주소 찾기</DialogTitle>
+          </DialogHeader>
+
+          <DaumPostcodeEmbed
+            onComplete={handleComplete}
+            className="h-[500px]"
+            onClose={() => setIsDialogOpen(false)}
+            style={{ width: '100%', height: '300' }}
+          />
+        </DialogContent>
+      </Dialog>
     </Card>
   );
 };
