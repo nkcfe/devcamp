@@ -25,3 +25,13 @@ export interface UserType {
   email?: string | null | undefined;
   image?: string | null | undefined;
 }
+
+export interface UserCouponType {
+  couponId: string;
+  code: string;
+  discount: number;
+  type: string;
+  createdAt: string;
+  expiredAt: string;
+  userCoupons: UserType[];
+}

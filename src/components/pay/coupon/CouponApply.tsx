@@ -1,8 +1,5 @@
 'use client';
-
-import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
-import { z } from 'zod';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -19,16 +16,32 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { toast } from '@/components/ui/use-toast';
+import { UserCouponType } from '@/module/type';
+import { useQuery } from '@tanstack/react-query';
+import axios from 'axios';
 
 const CouponApply = () => {
+  const { data: coupons, isLoading } = useQuery<any, unknown, UserCouponType[]>(
+    {
+      queryKey: ['coupons'],
+      queryFn: async () => {
+        const response = await axios.get('/api/coupons');
+        return response.data;
+      },
+    },
+  );
   const form = useForm({});
 
   function onSubmit() {}
 
+  if (isLoading) return <div>Loading...</div>;
+
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="flex items-end">
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="flex items-end gap-2"
+      >
         <FormField
           control={form.control}
           name="email"
@@ -42,9 +55,15 @@ const CouponApply = () => {
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  <SelectItem value="m@example.com">m@example.com</SelectItem>
-                  <SelectItem value="m@google.com">m@google.com</SelectItem>
-                  <SelectItem value="m@support.com">m@support.com</SelectItem>
+                  {coupons?.map((coupon) => (
+                    <SelectItem key={coupon.couponId} value={coupon.code}>
+                      {coupon.type === 'PERCENTAGE' ? (
+                        <div>{coupon.discount}% 할인 쿠폰</div>
+                      ) : (
+                        <div>{coupon.discount}원 할인 쿠폰</div>
+                      )}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             </FormItem>

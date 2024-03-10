@@ -5,6 +5,8 @@ import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/Input';
 import CouponRegistration from './CouponRegistration';
 import Point from './Point';
+import { useQuery } from '@tanstack/react-query';
+import axios from 'axios';
 
 const Coupon = () => {
   return (
