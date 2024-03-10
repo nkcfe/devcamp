@@ -3,8 +3,6 @@
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import React, { useEffect } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
-import Image from 'next/image';
 import OrderProductionInfo from './OrderProductionInfo';
 import OrdererInfo from './OrdererInfo';
 import { useSession } from 'next-auth/react';
@@ -12,6 +10,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ordererSchema } from '@/validators/orderer';
 import DeliveryInfo from './DeliveryInfo';
+import Coupon from './coupon';
 
 const PayPage = () => {
   const { data } = useSession();
@@ -53,6 +52,7 @@ const PayPage = () => {
               <OrderProductionInfo cartItems={cartItems} />
               <OrdererInfo user={user} OrderForm={OrderForm} />
               <DeliveryInfo />
+              <Coupon />
             </div>
           </div>
           <div className="bg-gray-500">ㅁㄴㅇㄹㅁㄴㅇㄹ</div>

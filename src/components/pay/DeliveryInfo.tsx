@@ -52,7 +52,7 @@ const DeliveryInfo = () => {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>주문자 정보</CardTitle>
+        <CardTitle>배송지 정보</CardTitle>
       </CardHeader>
       <CardContent className="mt-2 p-6 pt-0">
         <Form {...DeliveryForm}>
@@ -63,7 +63,7 @@ const DeliveryInfo = () => {
                 control={DeliveryForm.control}
                 render={({ field }) => (
                   <FormItem className="w-full">
-                    <FormLabel>이름</FormLabel>
+                    <FormLabel>수령자</FormLabel>
                     <FormControl>
                       <Input placeholder="홍길동" {...field} />
                     </FormControl>
