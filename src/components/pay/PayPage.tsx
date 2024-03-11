@@ -15,6 +15,7 @@ import Summary from './Summary';
 import Payment from './Payment';
 import { CartItemType } from '@/module/type';
 import Point from './coupon/Point';
+import { loadTossPayments } from '@tosspayments/payment-sdk';
 
 const PayPage = () => {
   const { data } = useSession();
@@ -50,8 +51,35 @@ const PayPage = () => {
     },
   });
 
-  const handleSubmit = (data: OrderType) => {
-    // setIsLoading(true);
+  const getCouponDiscount = () => {
+    if (applyCoupon === '') return 0;
+    if (totalPrice === undefined) return 0;
+
+    const coupon = JSON.parse(applyCoupon);
+
+    if (coupon.type === 'PERCENTAGE') {
+      return totalPrice! * (coupon.discount / 100);
+    } else {
+      return coupon.discount;
+    }
+  };
+
+  const handleSubmit = async (data: OrderType) => {
+    const tossPayments = await loadTossPayments(
+      process.env.NEXT_PUBLIC_TOSS_CLIENT_KEY as string,
+    );
+
+    const finalPrice = totalPrice! - getCouponDiscount() - applyPoint;
+
+    if (!cartItems) return;
+
+    await tossPayments.requestPayment('카드', {
+      amount: finalPrice,
+      orderId: Math.random().toString(36).slice(2),
+      orderName: `${cartItems[0].product.name}외 ${cartItems.length - 1}개의 상품`,
+      successUrl: `${window.location.origin}/payments/success`,
+      failUrl: `${window.location.origin}/payments/fail`,
+    });
   };
 
   const handleApplyCoupon = (coupon: string) => {
@@ -80,12 +108,12 @@ const PayPage = () => {
     <div className="min-h-screen bg-secondary py-28">
       <div className="mx-auto flex flex-col items-center justify-start lg:max-w-4xl">
         <div className="text-4xl font-bold">결제하기</div>
-        <div className="mt-20 grid w-full grid-cols-5 gap-6">
+        <form
+          onSubmit={OrderForm.handleSubmit(handleSubmit)}
+          className="mt-20 grid w-full grid-cols-5 gap-6"
+        >
           <div className="col-span-3">
-            <form
-              onSubmit={OrderForm.handleSubmit(handleSubmit)}
-              className="flex flex-col gap-6"
-            >
+            <div className="flex flex-col gap-6">
               <OrderProductionInfo cartItems={cartItems} />
               <OrdererInfo OrderForm={OrderForm} />
               <DeliveryInfo OrderForm={OrderForm} />
@@ -93,17 +121,20 @@ const PayPage = () => {
                 handleApplyCoupon={handleApplyCoupon}
                 handleCancleCoupon={handleCancleCoupon}
               />
-              <Point applyPoint={applyPoint} setApplyPoint={setApplyPoint}/>
-            </form>
+              <Point applyPoint={applyPoint} setApplyPoint={setApplyPoint} />
+            </div>
           </div>
 
           <div className="relative col-span-2 ">
             <div className="sticky top-20 flex flex-col gap-6">
-              <Summary totalPrice={totalPrice} applyCoupon={applyCoupon} applyPoint={applyPoint}/>
-              <Payment />
+              <Summary
+                totalPrice={totalPrice}
+                getCouponDiscount={getCouponDiscount}
+                applyPoint={applyPoint}
+              />
             </div>
           </div>
-        </div>
+        </form>
       </div>
     </div>
   );
