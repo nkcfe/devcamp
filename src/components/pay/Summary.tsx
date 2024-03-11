@@ -7,7 +7,29 @@ import {
   CardTitle,
 } from '../ui/card';
 
-const Summary = () => {
+interface SummaryProps {
+  totalPrice: number | undefined;
+  applyCoupon: string;
+}
+
+const Summary = (props: SummaryProps) => {
+  const { totalPrice, applyCoupon } = props;
+
+  const getCouponDiscount = () => {
+    if (applyCoupon === '') return 0;
+    if (totalPrice === undefined) return 0;
+
+    const coupon = JSON.parse(applyCoupon);
+
+    if (coupon.type === 'PERCENTAGE') {
+      return totalPrice! * (coupon.discount / 100);
+    } else {
+      return coupon.discount;
+    }
+  };
+
+  console.log(getCouponDiscount());
+
   return (
     <Card>
       <CardHeader>
@@ -16,11 +38,11 @@ const Summary = () => {
           <div className="mt-6 flex flex-col">
             <div className="flex justify-between">
               <div className="text-gray-500">상품 가격</div>
-              <div>18,000원</div>
+              <div>{totalPrice?.toLocaleString()}원</div>
             </div>
             <div className="flex justify-between">
               <div className="text-gray-500">쿠폰 할인</div>
-              <div>-1,000원</div>
+              <div>-{getCouponDiscount().toLocaleString()}원</div>
             </div>
             <div className="flex justify-between">
               <div className="text-gray-500">포인트 사용</div>
@@ -37,7 +59,9 @@ const Summary = () => {
       <CardFooter>
         <div className="flex w-full justify-between">
           <div className="text-gray-800">총 결제금액</div>
-          <div className="font-bold text-blue-500">19,500원</div>
+          <div className="font-bold text-blue-500">
+            {(totalPrice! - getCouponDiscount()).toLocaleString()}원
+          </div>
         </div>
       </CardFooter>
       <div className="rounded-b-lg bg-secondary p-4 px-6">

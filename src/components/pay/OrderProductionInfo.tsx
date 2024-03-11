@@ -4,7 +4,7 @@ import Image from 'next/image';
 import { CartItemType } from '@/module/type';
 
 interface OrderProductionInfoProps {
-  cartItems: CartItemType[];
+  cartItems: CartItemType[] | undefined;
 }
 
 const OrderProductionInfo = (props: OrderProductionInfoProps) => {
@@ -14,7 +14,7 @@ const OrderProductionInfo = (props: OrderProductionInfoProps) => {
       <CardHeader>
         <CardTitle>주문 상품 정보</CardTitle>
       </CardHeader>
-      {cartItems.map((item: any) => {
+      {cartItems?.map((item: any) => {
         return (
           <CardContent key={item.id} className="mt-2 p-6 pt-0">
             <div className="flex">

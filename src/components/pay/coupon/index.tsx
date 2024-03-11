@@ -1,14 +1,17 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '../../ui/card';
 import CouponApply from './CouponApply';
-import { Label } from '@/components/ui/label';
-import { Input } from '@/components/ui/Input';
 import CouponRegistration from './CouponRegistration';
 import Point from './Point';
-import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
 
-const Coupon = () => {
+interface CouponProps {
+  handleApplyCoupon: (coupon: string) => void;
+  handleCancleCoupon: () => void;
+}
+
+const Coupon = (props: CouponProps) => {
+  const { handleApplyCoupon, handleCancleCoupon } = props;
+
   return (
     <Card>
       <CardHeader>
@@ -16,7 +19,10 @@ const Coupon = () => {
       </CardHeader>
       <CardContent className="mt-2 p-6 pt-0">
         <div className="flex flex-col gap-6">
-          <CouponApply />
+          <CouponApply
+            handleApplyCoupon={handleApplyCoupon}
+            handleCancleCoupon={handleCancleCoupon}
+          />
           <CouponRegistration />
           <Point />
         </div>

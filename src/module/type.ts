@@ -17,7 +17,7 @@ export interface CartItemType {
   createdAt: string;
   productId: string;
   quantity: number;
-  product: ProductType[];
+  product: ProductType;
 }
 
 export interface UserType {

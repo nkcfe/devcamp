@@ -13,13 +13,19 @@ import DeliveryInfo from './DeliveryInfo';
 import Coupon from './coupon';
 import Summary from './Summary';
 import Payment from './Payment';
+import { CartItemType } from '@/module/type';
 
 const PayPage = () => {
   const { data } = useSession();
   const user = data?.user;
   const [isLoading, setIsLoading] = useState(false);
+  const [applyCoupon, setApplyCoupon] = useState('');
 
-  const { data: cartItems, isLoading: isItemsLoading } = useQuery({
+  const { data: cartItems, isLoading: isItemsLoading } = useQuery<
+    any,
+    unknown,
+    CartItemType[]
+  >({
     queryKey: ['cart'],
     queryFn: async () => {
       const response = await axios.get('/api/cart');
@@ -46,6 +52,14 @@ const PayPage = () => {
     // setIsLoading(true);
   };
 
+  const handleApplyCoupon = (coupon: string) => {
+    setApplyCoupon(coupon);
+  };
+
+  const handleCancleCoupon = () => {
+    setApplyCoupon('');
+  };
+
   useEffect(() => {
     if (user?.name && user?.email) {
       OrderForm.setValue('name', user?.name);
@@ -55,30 +69,41 @@ const PayPage = () => {
 
   if (isItemsLoading) return <div>Loading...</div>;
 
+  const totalPrice = cartItems?.reduce(
+    (acc, item) => acc + item.product.price * item.quantity,
+    0,
+  );
+
   return (
     <div className="min-h-screen bg-secondary py-28">
       <div className="mx-auto flex flex-col items-center justify-start lg:max-w-4xl">
         <div className="text-4xl font-bold">결제하기</div>
-        <form
-          className="mt-20 grid w-full grid-cols-5 gap-6"
-          onSubmit={OrderForm.handleSubmit(handleSubmit)}
-        >
+        <div className="mt-20 grid w-full grid-cols-5 gap-6">
           <div className="col-span-3">
-            <div className="flex flex-col gap-6">
+            <form
+              onSubmit={OrderForm.handleSubmit(handleSubmit)}
+              className="flex flex-col gap-6"
+            >
               <OrderProductionInfo cartItems={cartItems} />
               <OrdererInfo OrderForm={OrderForm} />
               <DeliveryInfo OrderForm={OrderForm} />
-              <Coupon />
-            </div>
+              <Coupon
+                handleApplyCoupon={handleApplyCoupon}
+                handleCancleCoupon={handleCancleCoupon}
+              />
+            </form>
           </div>
 
           <div className="relative col-span-2 ">
             <div className="sticky top-20 flex flex-col gap-6">
-              <Summary />
+              <Summary
+                totalPrice={totalPrice}
+                applyCoupon={applyCoupon}
+              />
               <Payment />
             </div>
           </div>
-        </form>
+        </div>
       </div>
     </div>
   );
