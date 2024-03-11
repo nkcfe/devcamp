@@ -28,3 +28,5 @@ export const getProduct = cache(async (id: string) => {
 
   return product;
 });
+
+export const getCart = cache(async (userId: string) => {});

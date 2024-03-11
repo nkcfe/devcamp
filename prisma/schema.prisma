@@ -41,16 +41,42 @@ model Session {
 }
 
 model User {
-  id             String    @id @default(cuid())
+  id             String       @id @default(cuid())
   name           String?
-  email          String?   @unique
+  email          String?      @unique
   emailVerified  DateTime?
   hashedPassword String?
   image          String?
-  cartId         String?   @unique
+  cartId         String?      @unique
+  point          Int          @default(10000)
   accounts       Account[]
   sessions       Session[]
+  userCoupons    UserCoupon[]
   cart           Cart?
+}
+
+enum CouponType {
+  FIXED
+  PERCENTAGE
+}
+
+model UserCoupon {
+  userId   String
+  couponId String
+  user     User   @relation(fields: [userId], references: [id])
+  coupon   Coupon @relation(fields: [couponId], references: [couponId])
+
+  @@id([userId, couponId])
+}
+
+model Coupon {
+  couponId    String       @id @default(cuid())
+  code        String       @unique
+  discount    Float
+  type        CouponType
+  expires     DateTime
+  createdAt   DateTime     @default(now())
+  userCoupons UserCoupon[]
 }
 
 model Cart {
