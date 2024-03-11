@@ -10,10 +10,11 @@ import {
 interface SummaryProps {
   totalPrice: number | undefined;
   applyCoupon: string;
+  applyPoint: number;
 }
 
 const Summary = (props: SummaryProps) => {
-  const { totalPrice, applyCoupon } = props;
+  const { totalPrice, applyCoupon, applyPoint } = props;
 
   const getCouponDiscount = () => {
     if (applyCoupon === '') return 0;
@@ -27,8 +28,6 @@ const Summary = (props: SummaryProps) => {
       return coupon.discount;
     }
   };
-
-  console.log(getCouponDiscount());
 
   return (
     <Card>
@@ -46,7 +45,7 @@ const Summary = (props: SummaryProps) => {
             </div>
             <div className="flex justify-between">
               <div className="text-gray-500">포인트 사용</div>
-              <div>-0원</div>
+              <div>-{applyPoint.toLocaleString()}원</div>
             </div>
             <div className="flex justify-between">
               <div className="text-gray-500">배송비</div>
@@ -60,7 +59,8 @@ const Summary = (props: SummaryProps) => {
         <div className="flex w-full justify-between">
           <div className="text-gray-800">총 결제금액</div>
           <div className="font-bold text-blue-500">
-            {(totalPrice! - getCouponDiscount()).toLocaleString()}원
+            {(totalPrice! - getCouponDiscount() - applyPoint).toLocaleString()}
+            원
           </div>
         </div>
       </CardFooter>

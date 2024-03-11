@@ -14,12 +14,14 @@ import Coupon from './coupon';
 import Summary from './Summary';
 import Payment from './Payment';
 import { CartItemType } from '@/module/type';
+import Point from './coupon/Point';
 
 const PayPage = () => {
   const { data } = useSession();
   const user = data?.user;
   const [isLoading, setIsLoading] = useState(false);
   const [applyCoupon, setApplyCoupon] = useState('');
+  const [applyPoint, setApplyPoint] = useState(0);
 
   const { data: cartItems, isLoading: isItemsLoading } = useQuery<
     any,
@@ -91,15 +93,13 @@ const PayPage = () => {
                 handleApplyCoupon={handleApplyCoupon}
                 handleCancleCoupon={handleCancleCoupon}
               />
+              <Point applyPoint={applyPoint} setApplyPoint={setApplyPoint}/>
             </form>
           </div>
 
           <div className="relative col-span-2 ">
             <div className="sticky top-20 flex flex-col gap-6">
-              <Summary
-                totalPrice={totalPrice}
-                applyCoupon={applyCoupon}
-              />
+              <Summary totalPrice={totalPrice} applyCoupon={applyCoupon} applyPoint={applyPoint}/>
               <Payment />
             </div>
           </div>

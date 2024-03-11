@@ -48,6 +48,7 @@ model User {
   hashedPassword String?
   image          String?
   cartId         String?      @unique
+  point          Int          @default(10000)
   accounts       Account[]
   sessions       Session[]
   userCoupons    UserCoupon[]
@@ -59,6 +60,15 @@ enum CouponType {
   PERCENTAGE
 }
 
+model UserCoupon {
+  userId   String
+  couponId String
+  user     User   @relation(fields: [userId], references: [id])
+  coupon   Coupon @relation(fields: [couponId], references: [couponId])
+
+  @@id([userId, couponId])
+}
+
 model Coupon {
   couponId    String       @id @default(cuid())
   code        String       @unique
@@ -67,15 +77,6 @@ model Coupon {
   expires     DateTime
   createdAt   DateTime     @default(now())
   userCoupons UserCoupon[]
-}
-
-model UserCoupon {
-  userId   String
-  couponId String
-  user     User   @relation(fields: [userId], references: [id])
-  coupon   Coupon @relation(fields: [couponId], references: [couponId])
-
-  @@id([userId, couponId])
 }
 
 model Cart {
