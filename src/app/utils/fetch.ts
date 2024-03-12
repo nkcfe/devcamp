@@ -1,6 +1,9 @@
 import { cache } from 'react';
 
 import prisma from '@/db';
+import { getSession } from 'next-auth/react';
+import { authOptions } from './authOptions';
+import { getServerSession } from 'next-auth';
 
 export const getProducts = cache(async () => {
   const products = await prisma.product.findMany({
@@ -54,3 +57,28 @@ export const getCategories = cache(async () => {
 
   return Array.from(setCategories);
 });
+
+export const getCartItems = async () => {
+  const session = await getServerSession(authOptions);
+  if (!session) return { cartItems: [], totalPrice: 0 };
+
+  const user = await prisma.user.findUnique({
+    where: { email: session.user?.email as string },
+    select: { cartId: true },
+  });
+
+  const cartId = user?.cartId;
+  const cartItems = await prisma.cartItem.findMany({
+    where: { cartId: cartId as string },
+    include: {
+      product: true,
+    },
+  });
+
+  const totalPrice = cartItems.reduce(
+    (acc, item) => acc + item.product.price,
+    0,
+  );
+
+  return { cartItems, totalPrice };
+};

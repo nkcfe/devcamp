@@ -1,11 +1,12 @@
 export interface ProductType {
-  productId: string;
-  name: string;
-  price: number;
-  image: string;
   category: string;
+  createdAt?: Date;
   description: string;
   detail: string;
+  image: string;
+  name: string;
+  price: number;
+  productId: string;
 }
 
 export interface ItemType {
@@ -16,10 +17,19 @@ export interface ItemType {
 export interface CartItemType {
   cartId: string;
   cartItemId: string;
-  createdAt: string;
+  createdAt: Date;
   productId: string;
   quantity: number;
   product: ProductType[];
+}
+
+export interface OrderProductType {
+  cartId: string;
+  cartItemId: string;
+  createdAt: Date;
+  productId: string;
+  quantity: number;
+  product: ProductType;
 }
 
 export interface UserType {
@@ -35,5 +45,4 @@ export interface UserCouponType {
   type: string;
   createdAt: string;
   expiredAt: string;
-  userCoupons: UserType[];
 }

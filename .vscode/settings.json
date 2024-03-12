@@ -5,5 +5,5 @@
     ["cn\\(([^)]*)\\)", "(?:'|\"|`)([^']*)(?:'|\"|`)"]
   ],
   "editor.fontFamily": "D2Coding",
-  "workbench.colorTheme": "Material Theme Darker"
+  "workbench.colorTheme": "Atom One Dark"
 }

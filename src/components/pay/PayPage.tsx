@@ -12,28 +12,26 @@ import { OrderType, ordererSchema } from '@/validators/orderer';
 import DeliveryInfo from './DeliveryInfo';
 import Coupon from './coupon';
 import Summary from './Summary';
-import { CartItemType } from '@/module/type';
+import type { OrderProductType, UserCouponType } from '@/module/type';
 import Point from './coupon/Point';
 import { loadTossPayments } from '@tosspayments/payment-sdk';
 
-const PayPage = () => {
-  const { data } = useSession();
-  const user = data?.user;
-  const [isLoading, setIsLoading] = useState(false);
-  const [applyCoupon, setApplyCoupon] = useState('');
-  const [applyPoint, setApplyPoint] = useState(0);
+interface PayPageProps {
+  cartItems: { cartItems: OrderProductType[]; totalPrice: number };
+}
 
-  const { data: cartItems, isLoading: isItemsLoading } = useQuery<
-    any,
-    unknown,
-    CartItemType[]
-  >({
-    queryKey: ['cart'],
-    queryFn: async () => {
-      const response = await axios.get('/api/cart');
-      return response.data;
-    },
-  });
+const PayPage = (props: PayPageProps) => {
+  const { data } = useSession();
+  const { cartItems } = props.cartItems;
+  const totalPrice = props.cartItems.totalPrice;
+  const user = data?.user;
+
+  const [applyCoupon, setApplyCoupon] = useState<UserCouponType | null>(null);
+  const [applyPoint, setApplyPoint] = useState(0);
+  const [paymentPrice, setPaymentPrice] = useState(totalPrice);
+  const [accuralPoint, setAccuralPoint] = useState(
+    Math.floor(totalPrice * 0.01),
+  );
 
   const OrderForm = useForm({
     resolver: zodResolver(ordererSchema),
@@ -50,16 +48,21 @@ const PayPage = () => {
     },
   });
 
-  const getCouponDiscount = () => {
-    if (applyCoupon === '') return 0;
-    if (totalPrice === undefined) return 0;
-
-    const coupon = JSON.parse(applyCoupon);
-
-    if (coupon.type === 'PERCENTAGE') {
-      return totalPrice! * (coupon.discount / 100);
+  const getCouponDiscount = (coupon?: UserCouponType) => {
+    if (coupon) {
+      if (coupon.type === 'PERCENTAGE') {
+        return totalPrice * (coupon.discount / 100);
+      } else {
+        return coupon.discount;
+      }
     } else {
-      return coupon.discount;
+      if (!applyCoupon) return 0;
+
+      if (applyCoupon?.type === 'PERCENTAGE') {
+        return totalPrice * (applyCoupon?.discount / 100);
+      } else {
+        return applyCoupon?.discount;
+      }
     }
   };
 
@@ -70,10 +73,8 @@ const PayPage = () => {
       process.env.NEXT_PUBLIC_TOSS_CLIENT_KEY as string,
     );
 
-    const finalPrice = totalPrice! - getCouponDiscount() - applyPoint;
-
     await tossPayments.requestPayment('카드', {
-      amount: finalPrice,
+      amount: paymentPrice,
       orderId: Math.random().toString(36).slice(2),
       orderName: `${cartItems[0].product.name}외 ${cartItems.length - 1}개의 상품`,
       successUrl: `${window.location.origin}/payments/success`,
@@ -81,12 +82,27 @@ const PayPage = () => {
     });
   };
 
-  const handleApplyCoupon = (coupon: string) => {
+  const handleApplyCoupon = (coupon: UserCouponType) => {
+    if (coupon.type === 'PERCENTAGE') {
+      const discountPrice = getCouponDiscount(coupon);
+      setPaymentPrice(paymentPrice - discountPrice);
+    } else {
+      setPaymentPrice(paymentPrice - coupon.discount);
+    }
+
     setApplyCoupon(coupon);
   };
 
   const handleCancleCoupon = () => {
-    setApplyCoupon('');
+    if (!applyCoupon) return;
+
+    if (applyCoupon?.type === 'PERCENTAGE') {
+      const discountPrice = getCouponDiscount(applyCoupon);
+      setPaymentPrice(paymentPrice + discountPrice);
+    } else {
+      setPaymentPrice(paymentPrice + applyCoupon?.discount);
+    }
+    setApplyCoupon(null);
   };
 
   useEffect(() => {
@@ -96,12 +112,7 @@ const PayPage = () => {
     }
   }, [OrderForm, user?.email, user?.name]);
 
-  if (isItemsLoading) return <div>Loading...</div>;
-
-  const totalPrice = cartItems?.reduce(
-    (acc, item) => acc + item.product.price * item.quantity,
-    0,
-  );
+  const couponApplyPrice = paymentPrice - getCouponDiscount();
 
   return (
     <div className="min-h-screen bg-background py-28">
@@ -121,7 +132,11 @@ const PayPage = () => {
                 handleApplyCoupon={handleApplyCoupon}
                 handleCancleCoupon={handleCancleCoupon}
               />
-              <Point applyPoint={applyPoint} setApplyPoint={setApplyPoint} />
+              <Point
+                applyPoint={applyPoint}
+                setApplyPoint={setApplyPoint}
+                couponApplyPrice={couponApplyPrice}
+              />
             </div>
           </div>
 
@@ -131,6 +146,7 @@ const PayPage = () => {
                 totalPrice={totalPrice}
                 getCouponDiscount={getCouponDiscount}
                 applyPoint={applyPoint}
+                accuralPoint={accuralPoint}
               />
             </div>
           </div>

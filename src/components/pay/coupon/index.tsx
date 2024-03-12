@@ -2,9 +2,10 @@ import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '../../ui/card';
 import CouponApply from './CouponApply';
 import CouponRegistration from './CouponRegistration';
+import { UserCouponType } from '@/module/type';
 
 interface CouponProps {
-  handleApplyCoupon: (coupon: string) => void;
+  handleApplyCoupon: (coupon: UserCouponType) => void;
   handleCancleCoupon: () => void;
 }
 

@@ -87,5 +87,20 @@ export const authOptions: NextAuthOptions = {
 
       return token;
     },
+    async signIn({ user }) {
+      const userPoint = await prisma.point.findFirst({
+        where: { userId: user?.id },
+      });
+
+      if (!userPoint) {
+        await prisma.point.create({
+          data: {
+            amount: 10000,
+            userId: user?.id,
+          },
+        });
+      }
+      return true;
+    },
   },
 };

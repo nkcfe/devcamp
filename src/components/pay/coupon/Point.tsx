@@ -18,11 +18,12 @@ import axios from 'axios';
 interface PointProps {
   setApplyPoint: React.Dispatch<React.SetStateAction<number>>;
   applyPoint: number;
+  couponApplyPrice: number;
 }
 
 const Point = (props: PointProps) => {
-  const { setApplyPoint, applyPoint } = props;
-  
+  const { setApplyPoint, applyPoint, couponApplyPrice } = props;
+
   const { data: availablePoint, isLoading } = useQuery({
     queryKey: ['point'],
     queryFn: async () => {
@@ -32,8 +33,10 @@ const Point = (props: PointProps) => {
   });
 
   const handleValidatedPoint = (point: number) => {
-    if (point > availablePoint.point) {
-      setApplyPoint(availablePoint.point);
+    if (point > availablePoint) {
+      setApplyPoint(availablePoint);
+    } else if (point > couponApplyPrice) {
+      setApplyPoint(couponApplyPrice);
     }
   };
 
@@ -46,7 +49,11 @@ const Point = (props: PointProps) => {
   };
 
   const handleApplyAllPoint = () => {
-    setApplyPoint(availablePoint.point);
+    if (availablePoint < couponApplyPrice) {
+      setApplyPoint(availablePoint);
+    } else {
+      setApplyPoint(couponApplyPrice);
+    }
   };
 
   const handleCanclePoint = () => {
@@ -68,7 +75,7 @@ const Point = (props: PointProps) => {
             <Input
               className="pr-14 text-right text-lg font-bold"
               placeholder="0"
-              disabled={availablePoint.point === 0}
+              disabled={availablePoint === 0}
               value={applyPoint.toLocaleString()}
               onChange={(e) => handleChangePoint(e)}
               onBlur={() => handleValidatedPoint(applyPoint)}
@@ -94,7 +101,7 @@ const Point = (props: PointProps) => {
         <div className="flex items-center justify-center gap-2">
           <div>사용 가능 포인트 :</div>
           <div className="font-bold">
-            {(availablePoint.point - applyPoint).toLocaleString()}원
+            {(availablePoint - applyPoint).toLocaleString()}원
           </div>
         </div>
       </CardFooter>

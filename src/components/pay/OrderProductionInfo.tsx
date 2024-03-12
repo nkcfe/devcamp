@@ -1,10 +1,10 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import Image from 'next/image';
-import { CartItemType } from '@/module/type';
+import type { OrderProductType } from '@/module/type';
 
 interface OrderProductionInfoProps {
-  cartItems: CartItemType[] | undefined;
+  cartItems: OrderProductType[] | undefined;
 }
 
 const OrderProductionInfo = (props: OrderProductionInfoProps) => {

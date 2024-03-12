@@ -86,7 +86,11 @@ const NavigationBar = () => {
                     My page
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem onClick={() => signOut()}>
+                  <DropdownMenuItem
+                    onClick={async () => {
+                      signOut();
+                    }}
+                  >
                     Logout
                   </DropdownMenuItem>
                 </DropdownMenuContent>

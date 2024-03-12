@@ -79,7 +79,6 @@ const RegisterPage = () => {
             duration: 2000,
           });
         }
-
         if (callback?.ok) {
           router.push('/');
         }

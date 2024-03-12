@@ -1,14 +1,7 @@
 'use client';
-import { useForm } from 'react-hook-form';
 
 import { Button } from '@/components/ui/button';
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-} from '@/components/ui/form';
+
 import {
   Select,
   SelectContent,
@@ -24,14 +17,16 @@ import { Label } from '@/components/ui/label';
 import { useToast } from '@/components/ui/use-toast';
 
 interface CouponApplyProps {
-  handleApplyCoupon: (coupon: string) => void;
+  handleApplyCoupon: (coupon: UserCouponType) => void;
   handleCancleCoupon: () => void;
 }
 
 const CouponApply = (props: CouponApplyProps) => {
   const { handleApplyCoupon, handleCancleCoupon } = props;
   const { toast } = useToast();
-  const [coupon, setCoupon] = useState('');
+
+  const [coupon, setCoupon] = useState<string>('');
+
   const { data: coupons, isLoading } = useQuery<any, unknown, UserCouponType[]>(
     {
       queryKey: ['coupons'],
@@ -51,7 +46,7 @@ const CouponApply = (props: CouponApplyProps) => {
       });
     }
 
-    handleApplyCoupon(coupon);
+    handleApplyCoupon(JSON.parse(coupon));
     toast({
       title: '쿠폰이 적용되었습니다.',
       duration: 2000,
@@ -71,8 +66,14 @@ const CouponApply = (props: CouponApplyProps) => {
         <div className="flex flex-col gap-2">
           <Label className="px-1">쿠폰 선택</Label>
           <div className="flex gap-2 px-2">
-            <SelectTrigger>
-              <SelectValue placeholder="쿠폰을 선택해주세요." />
+            <SelectTrigger disabled={coupons?.length === 0}>
+              <SelectValue
+                placeholder={
+                  coupons?.length === 0
+                    ? '등록된 쿠폰이 없습니다.'
+                    : '쿠폰을 선택해주세요.'
+                }
+              />
             </SelectTrigger>
             <SelectContent>
               {coupons?.map((coupon) => (

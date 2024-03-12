@@ -10,17 +10,17 @@ import {
 } from '../ui/card';
 import { loadTossPayments } from '@tosspayments/payment-sdk';
 import { Button } from '../ui/button';
+import { UserCouponType } from '@/module/type';
 
 interface SummaryProps {
   totalPrice: number | undefined;
-  getCouponDiscount: () => number;
+  getCouponDiscount: (coupon?: UserCouponType) => number;
   applyPoint: number;
+  accuralPoint: number;
 }
 
 const Summary = (props: SummaryProps) => {
-  const { totalPrice, getCouponDiscount, applyPoint } = props;
-
-  const handleOrder = async () => {};
+  const { totalPrice, getCouponDiscount, applyPoint, accuralPoint } = props;
 
   return (
     <>
@@ -64,7 +64,7 @@ const Summary = (props: SummaryProps) => {
         </CardFooter>
         <div className="rounded-b-lg bg-secondary p-4 px-6">
           <span className="font-bold text-blue-500">
-            {(totalPrice! * 0.1).toLocaleString()}
+            {accuralPoint.toLocaleString()}
           </span>{' '}
           포인트 적립예정
         </div>

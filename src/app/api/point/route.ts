@@ -12,9 +12,34 @@ export async function GET() {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const point = await prisma.user.findUnique({
+    const user = await prisma.user.findUnique({
       where: { email: session.user?.email as string },
-      select: { point: true },
+      select: { Point: true },
+    });
+
+    return NextResponse.json(user?.Point[0].amount, { status: 200 });
+  } catch (error) {
+    return NextResponse.error();
+  }
+}
+
+export async function POST() {
+  try {
+    const session = await getServerSession(authOptions);
+
+    if (!session) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
+    const user = await prisma.user.findUnique({
+      where: { email: session.user?.email as string },
+    });
+
+    const point = await prisma.point.create({
+      data: {
+        userId: user?.id as string,
+        amount: 10000,
+      },
     });
 
     return NextResponse.json(point, { status: 200 });
