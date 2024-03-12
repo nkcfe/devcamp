@@ -113,31 +113,31 @@ export async function POST(request: Request) {
 }
 
 export async function PUT(request: Request) {
-  const body = await request.json();
-  const { productId, customQuantity } = body;
-
-  const session = await getServerSession(authOptions);
-  if (!session) {
-    return new Response('Not logged in', { status: 401 });
-  }
-
-  const user = await prisma.user.findUnique({
-    where: { email: session.user?.email as string },
-    select: { cartId: true },
-  });
-
-  if (!user || !user.cartId) {
-    return new Response('User cart not found', { status: 404 });
-  }
-
-  const cartItem = await prisma.cartItem.findFirst({
-    where: {
-      cartId: user.cartId,
-      productId,
-    },
-  });
-
   try {
+    const body = await request.json();
+    const { productId, customQuantity } = body;
+
+    const session = await getServerSession(authOptions);
+    if (!session) {
+      return new Response('Not logged in', { status: 401 });
+    }
+
+    const user = await prisma.user.findUnique({
+      where: { email: session.user?.email as string },
+      select: { cartId: true },
+    });
+
+    if (!user || !user.cartId) {
+      return new Response('User cart not found', { status: 404 });
+    }
+
+    const cartItem = await prisma.cartItem.findFirst({
+      where: {
+        cartId: user.cartId,
+        productId,
+      },
+    });
+
     if (cartItem) {
       const updatedCartItem = await prisma.cartItem.update({
         where: { cartItemId: cartItem.cartItemId },
@@ -155,30 +155,29 @@ export async function PUT(request: Request) {
 }
 
 export async function DELETE(request: Request) {
-  const { productId } = await request.json();
-
-  const session = await getServerSession(authOptions);
-  if (!session) {
-    return new Response('Not logged in', { status: 401 });
-  }
-
-  const user = await prisma.user.findUnique({
-    where: { email: session.user?.email as string },
-    select: { cartId: true },
-  });
-
-  if (!user || !user.cartId) {
-    return new Response('User cart not found', { status: 404 });
-  }
-
-  const cartItem = await prisma.cartItem.findFirst({
-    where: {
-      cartId: user.cartId,
-      productId,
-    },
-  });
-
   try {
+    const { productId } = await request.json();
+
+    const session = await getServerSession(authOptions);
+    if (!session) {
+      return new Response('Not logged in', { status: 401 });
+    }
+
+    const user = await prisma.user.findUnique({
+      where: { email: session.user?.email as string },
+      select: { cartId: true },
+    });
+
+    if (!user || !user.cartId) {
+      return new Response('User cart not found', { status: 404 });
+    }
+
+    const cartItem = await prisma.cartItem.findFirst({
+      where: {
+        cartId: user.cartId,
+        productId,
+      },
+    });
     if (cartItem) {
       await prisma.cartItem.delete({
         where: { cartItemId: cartItem.cartItemId },
