@@ -45,8 +45,8 @@ const CartItem = (props: CartItemProps) => {
           <div className="flex flex-col flex-wrap items-start gap-2 px-2">
             <div className="text-lg">{item.product.name}</div>
             <Button
-              size="sm"
-              variant="ghost"
+              size="xs"
+              variant="destructive"
               onClick={() => deleteMutate(item.productId)}
             >
               Remove
