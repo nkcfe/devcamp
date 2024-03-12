@@ -104,10 +104,9 @@ const CartPage = () => {
         </div>
 
         <div className="mt-12 w-full">
-          {cartItems.length === 0 ? (
-            <Empty />
-          ) : (
-            <Table>
+          <div className="flex flex-col">
+            <div className="mb-4 p-2 text-3xl">CART LIST</div>
+            <Table className="border">
               <TableHeader>
                 <TableRow>
                   {tableHead.map((head) => (
@@ -128,7 +127,29 @@ const CartPage = () => {
                 ))}
               </TableBody>
             </Table>
-          )}
+
+            <div className="mb-4 mt-20 p-2 text-3xl">CART TOTALS</div>
+            <div className="flex w-96 flex-col justify-between border p-2">
+              <div className="flex items-center justify-between">
+                <div className="p-1 text-xl">Subtotal</div>
+                <div className="font-semibold">
+                  {totalPrice.toLocaleString()} ₩
+                </div>
+              </div>
+              <div className="flex items-center justify-between border-y">
+                <div className="p-1 text-xl">Shipping</div>
+                <div className="font-semibold">
+                  {progress === 100 ? '0' : '2500'} ₩
+                </div>
+              </div>
+              <div className="flex items-center justify-between">
+                <div className="p-1 text-2xl">Total</div>
+                <div className="font-semibold">
+                  {totalPrice.toLocaleString()} ₩
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
         <CartFooter totalQuantity={totalQuantity} totalPrice={totalPrice} />
