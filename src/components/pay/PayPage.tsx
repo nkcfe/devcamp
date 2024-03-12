@@ -14,6 +14,7 @@ import type { OrderProductType, UserCouponType } from '@/module/type';
 import Point from './coupon/Point';
 import { loadTossPayments } from '@tosspayments/payment-sdk';
 import { useToast } from '../ui/use-toast';
+import { useRouter } from 'next/navigation';
 
 interface PayPageProps {
   cartItems: { cartItems: OrderProductType[]; totalPrice: number };
@@ -26,13 +27,13 @@ const PayPage = (props: PayPageProps) => {
   const user = data?.user;
 
   const { toast } = useToast();
+  const router = useRouter();
 
   const [applyCoupon, setApplyCoupon] = useState<UserCouponType | null>(null);
   const [applyPoint, setApplyPoint] = useState(0);
   const [paymentPrice, setPaymentPrice] = useState(totalPrice);
-  const [accuralPoint, setAccuralPoint] = useState(
-    Math.floor(totalPrice * 0.01),
-  );
+  const [shippingPrice] = useState(totalPrice > 1000000 ? 0 : 2500);
+  const [accuralPoint] = useState(Math.floor(totalPrice * 0.01));
 
   const OrderForm = useForm({
     resolver: zodResolver(ordererSchema),
@@ -73,17 +74,21 @@ const PayPage = (props: PayPageProps) => {
   const handleSubmit = async (data: OrderType) => {
     if (!cartItems) return;
 
-    const tossPayments = await loadTossPayments(
-      process.env.NEXT_PUBLIC_TOSS_CLIENT_KEY as string,
-    );
+    if (paymentPrice <= 0) {
+      router.push('/payments/success');
+    } else {
+      const tossPayments = await loadTossPayments(
+        process.env.NEXT_PUBLIC_TOSS_CLIENT_KEY as string,
+      );
 
-    await tossPayments.requestPayment('카드', {
-      amount: paymentPrice,
-      orderId: Math.random().toString(36).slice(2),
-      orderName: `${cartItems[0].product.name}외 ${cartItems.length - 1}개의 상품`,
-      successUrl: `${window.location.origin}/payments/success`,
-      failUrl: `${window.location.origin}/payments/fail`,
-    });
+      await tossPayments.requestPayment('카드', {
+        amount: paymentPrice,
+        orderId: Math.random().toString(36).slice(2),
+        orderName: `${cartItems[0].product.name}외 ${cartItems.length - 1}개의 상품`,
+        successUrl: `${window.location.origin}/payments/success`,
+        failUrl: `${window.location.origin}/payments/fail`,
+      });
+    }
   };
 
   const handleApplyCoupon = (coupon: UserCouponType) => {
@@ -118,8 +123,10 @@ const PayPage = (props: PayPageProps) => {
   };
 
   useEffect(() => {
-    setPaymentPrice(totalPrice - getCouponDiscount() - applyPoint);
-  }, [applyPoint, getCouponDiscount, totalPrice]);
+    setPaymentPrice(
+      totalPrice - getCouponDiscount() - applyPoint + shippingPrice,
+    );
+  }, [applyPoint, getCouponDiscount, shippingPrice, totalPrice]);
 
   useEffect(() => {
     if (user?.name && user?.email) {
@@ -150,6 +157,7 @@ const PayPage = (props: PayPageProps) => {
                 applyPoint={applyPoint}
                 setApplyPoint={setApplyPoint}
                 couponApplyPrice={totalPrice - getCouponDiscount()}
+                shippingPrice={shippingPrice}
               />
             </div>
           </div>
@@ -162,6 +170,7 @@ const PayPage = (props: PayPageProps) => {
                 applyPoint={applyPoint}
                 accuralPoint={accuralPoint}
                 paymentPrice={paymentPrice}
+                shippingPrice={shippingPrice}
               />
             </div>
           </div>

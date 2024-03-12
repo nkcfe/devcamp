@@ -18,6 +18,7 @@ interface SummaryProps {
   applyPoint: number;
   accuralPoint: number;
   paymentPrice: number;
+  shippingPrice: number;
 }
 
 const Summary = (props: SummaryProps) => {
@@ -27,6 +28,7 @@ const Summary = (props: SummaryProps) => {
     applyPoint,
     accuralPoint,
     paymentPrice,
+    shippingPrice,
   } = props;
 
   return (
@@ -50,7 +52,7 @@ const Summary = (props: SummaryProps) => {
               </div>
               <div className="flex justify-between">
                 <div className="text-gray-500">배송비</div>
-                <div>+2,500원</div>
+                <div>+{shippingPrice.toLocaleString()}원</div>
               </div>
             </div>
           </CardContent>

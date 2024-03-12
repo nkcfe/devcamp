@@ -19,10 +19,11 @@ interface PointProps {
   setApplyPoint: React.Dispatch<React.SetStateAction<number>>;
   applyPoint: number;
   couponApplyPrice: number;
+  shippingPrice: number;
 }
 
 const Point = (props: PointProps) => {
-  const { setApplyPoint, applyPoint, couponApplyPrice } = props;
+  const { setApplyPoint, applyPoint, couponApplyPrice, shippingPrice } = props;
 
   const { data: availablePoint, isLoading } = useQuery({
     queryKey: ['point'],
@@ -35,8 +36,8 @@ const Point = (props: PointProps) => {
   const handleValidatedPoint = (point: number) => {
     if (point > availablePoint) {
       setApplyPoint(availablePoint);
-    } else if (point > couponApplyPrice) {
-      setApplyPoint(couponApplyPrice);
+    } else if (point > couponApplyPrice + 2500) {
+      setApplyPoint(couponApplyPrice + 2500);
     }
   };
 
@@ -49,10 +50,10 @@ const Point = (props: PointProps) => {
   };
 
   const handleApplyAllPoint = () => {
-    if (availablePoint < couponApplyPrice) {
+    if (availablePoint < couponApplyPrice + 2500) {
       setApplyPoint(availablePoint);
     } else {
-      setApplyPoint(couponApplyPrice);
+      setApplyPoint(couponApplyPrice + 2500);
     }
   };
 
