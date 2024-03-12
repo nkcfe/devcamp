@@ -9,10 +9,13 @@ export const getProducts = cache(async () => {
       name: true,
       price: true,
       image: true,
+      description: true,
+      category: true,
+      detail: true,
     },
   });
 
-  if (!products) return null;
+  if (!products) return [];
 
   return products;
 });
@@ -22,6 +25,15 @@ export const getProduct = cache(async (id: string) => {
     where: {
       productId: id,
     },
+    select: {
+      productId: true,
+      name: true,
+      price: true,
+      image: true,
+      description: true,
+      category: true,
+      detail: true,
+    },
   });
 
   if (!product) return null;
@@ -29,4 +41,16 @@ export const getProduct = cache(async (id: string) => {
   return product;
 });
 
-export const getCart = cache(async (userId: string) => {});
+export const getCategories = cache(async () => {
+  const categories = await prisma.product.findMany({
+    select: {
+      category: true,
+    },
+  });
+
+  if (!categories) return [];
+
+  const setCategories = new Set(categories.map((item) => item.category));
+
+  return Array.from(setCategories);
+});

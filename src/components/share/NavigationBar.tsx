@@ -14,7 +14,8 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { ModeToggle } from './mode-toggle';
 import { FiShoppingCart, FiUser } from 'react-icons/fi';
-import { BiSolidCoffeeBean } from 'react-icons/bi';
+import { FaChair } from 'react-icons/fa';
+
 import { Truculenta } from 'next/font/google';
 import { Dialog, DialogContent, DialogTrigger } from '../ui/dialog';
 import AuthPage from '../auth/AuthPage';
@@ -30,14 +31,12 @@ const NavigationBar = () => {
   const { status, data } = useSession();
 
   return (
-    <div className="fixed top-0 z-30 w-full">
-      <div className="container flex h-14 w-full items-center justify-between bg-background">
+    <div className="fixed top-0 z-30 flex w-screen items-center justify-center bg-background/40 backdrop-blur-lg">
+      <div className="mt-2 flex h-14 w-full items-center justify-between border-y border-y-gray-500 py-10 lg:max-w-6xl">
         <div className="text-xl">
           <Link href="/" className="flex items-center justify-center gap-2">
-            <BiSolidCoffeeBean />
-            <div className={cn('font-bold', truculenta.className)}>
-              Monday Coffee
-            </div>
+            <FaChair />
+            <div className={cn('font-bold', truculenta.className)}>IKEYO®</div>
           </Link>
         </div>
         <div className="flex gap-2">

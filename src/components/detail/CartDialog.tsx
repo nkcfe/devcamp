@@ -1,24 +1,25 @@
-import React from 'react';
+import React, { Dispatch, SetStateAction } from 'react';
 import {
   AlertDialog,
   AlertDialogAction,
   AlertDialogContent,
   AlertDialogTitle,
-  AlertDialogTrigger,
 } from '../ui/alert-dialog';
-import { Button } from '../ui/button';
 import { useRouter } from 'next/navigation';
 
 interface CartDialogProps {
-  isDialogOpen: boolean;
-  handleDialog: () => void;
+  isCartAlertOpen: boolean;
+  setIsCartAlertOpen: Dispatch<SetStateAction<boolean>>;
 }
 
 const CartDialog = (props: CartDialogProps) => {
-  const { isDialogOpen, handleDialog } = props;
+  const { isCartAlertOpen, setIsCartAlertOpen } = props;
   const router = useRouter();
   return (
-    <AlertDialog open={isDialogOpen} onOpenChange={handleDialog}>
+    <AlertDialog
+      open={isCartAlertOpen}
+      onOpenChange={(open) => setIsCartAlertOpen(open)}d
+    >
       <AlertDialogContent className="flex w-[320px] flex-col items-center justify-center">
         <AlertDialogTitle className="mb-10">
           장바구니에 상품이 추가되었습니다.

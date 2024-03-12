@@ -98,11 +98,14 @@ model CartItem {
 }
 
 model Product {
-  productId String   @id @default(cuid())
-  name      String
-  price     Float
-  image     String
-  createdAt DateTime @default(now())
+  productId   String   @id @default(cuid())
+  name        String
+  description String
+  detail      String
+  price       Float
+  image       String
+  category    String
+  createdAt   DateTime @default(now())
 
   cartItems CartItem[]
 }

@@ -1,9 +1,11 @@
 export interface ProductType {
   productId: string;
   name: string;
-  image: string;
   price: number;
-  createdAt: string;
+  image: string;
+  category: string;
+  description: string;
+  detail: string;
 }
 
 export interface ItemType {

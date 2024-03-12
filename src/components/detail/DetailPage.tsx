@@ -1,22 +1,39 @@
 'use client';
 
 import { useToast } from '@/components/ui/use-toast';
-import { ProductType } from '@/module/type';
+import type { ProductType } from '@/module/type';
 
-import Image from 'next/image';
 import React, { useState } from 'react';
 import DrawerPage from './DrawerPage';
 import { Dialog, DialogContent, DialogTrigger } from '../ui/dialog';
 import { Button } from '../ui/button';
 import AuthPage from '../auth/AuthPage';
 
+import BreadCrumbPage from './BreadCrumbPage';
+import ProductSummary from './ProductSummary';
+import { useSession } from 'next-auth/react';
+import axios from 'axios';
+import DetailAccordion from './DetailAccordion';
+import DetailFooter from './DetailFooter';
+import CartDialog from './CartDialog';
+
 const MAX_COUNT = 10;
 const MIN_COUNT = 1;
 
-const DetailPage = ({ productId, name, price, image }: ProductType) => {
-  const [quantity, setQuantity] = useState(MIN_COUNT);
-  const [open, setOpen] = useState(false);
+interface DetailPageProps {
+  product: ProductType;
+}
+
+const DetailPage = (props: DetailPageProps) => {
+  const { name, detail, price, productId } = props.product;
+
   const { toast } = useToast();
+  const { status } = useSession();
+
+  const [quantity, setQuantity] = useState(MIN_COUNT);
+  const [isAuthOpen, setIsAuthOpen] = useState(false);
+  const [isCartAlertOpen, setIsCartAlertOpen] = useState(false);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
   const addQuantity = () => {
     if (quantity >= MAX_COUNT)
@@ -37,43 +54,60 @@ const DetailPage = ({ productId, name, price, image }: ProductType) => {
     setQuantity((prev) => prev - 1);
   };
 
-  const handleOpen = () => {
-    setOpen(true);
+  const handleAddToCart = async () => {
+    if (status === 'authenticated') {
+      const result = await axios.post('/api/cart', {
+        productId,
+        quantity,
+      });
+      if (result.status === 200) {
+        setIsCartAlertOpen(true);
+      }
+    } else {
+      setIsAuthOpen(true);
+    }
   };
 
   return (
-    <div className="flex flex-col items-center justify-start">
-      <div className="flex h-screen flex-col items-center justify-center">
-        <Image src={image} alt={name} width={600} height={600} priority />
-        <div className="mt-6 text-xl font-semibold">{name}</div>
-        <div>{price.toLocaleString()}원</div>
-      </div>
-
-      {/* <TabPage /> */}
-
-      <div className="fixed bottom-0 z-[99] flex h-20 w-screen items-center justify-end gap-3 border-t bg-background">
-        <div>총 상품금액 ({quantity}개)</div>
-        <div className="mr-4 text-2xl font-bold">
-          {(price * quantity).toLocaleString()}원
+    <>
+      <div className="mt-28 flex items-center justify-center">
+        <div className="w-full lg:max-w-6xl">
+          <BreadCrumbPage name={name} />
+          <ProductSummary
+            product={props.product}
+            quantity={quantity}
+            addQuantity={addQuantity}
+            subtractQuantity={subtractQuantity}
+            handleAddToCart={handleAddToCart}
+          />
+          <hr className="my-10" />
+          <DetailAccordion detail={detail} />
         </div>
+        <DetailFooter
+          quantity={quantity}
+          price={price}
+          setIsDrawerOpen={setIsDrawerOpen}
+        />
         <DrawerPage
           productId={productId}
           quantity={quantity}
           addQuantity={addQuantity}
           subtractQuantity={subtractQuantity}
-          handleOpen={handleOpen}
+          handleAddToCart={handleAddToCart}
+          isDrawerOpen={isDrawerOpen}
+          setIsDrawerOpen={setIsDrawerOpen}
         />
       </div>
-
-      <Dialog open={open} onOpenChange={(open) => setOpen(open)}>
-        <DialogTrigger>
-          <Button variant="outline">Login</Button>
-        </DialogTrigger>
+      <Dialog open={isAuthOpen} onOpenChange={(open) => setIsAuthOpen(open)}>
         <DialogContent className="mx-0 flex w-auto items-center justify-center">
           <AuthPage />
         </DialogContent>
       </Dialog>
-    </div>
+      <CartDialog
+        isCartAlertOpen={isCartAlertOpen}
+        setIsCartAlertOpen={setIsCartAlertOpen}
+      />
+    </>
   );
 };
 

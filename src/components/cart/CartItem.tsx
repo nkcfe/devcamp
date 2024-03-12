@@ -21,7 +21,7 @@ interface CartItemProps {
 }
 
 const CartItem = (props: CartItemProps) => {
-  const { item, customQuantity, handleQuantity, mutate,resetQuantity } = props;
+  const { item, customQuantity, handleQuantity, mutate, resetQuantity } = props;
   return (
     <TableRow>
       <TableCell className="font-medium">
@@ -34,8 +34,8 @@ const CartItem = (props: CartItemProps) => {
             className="object-cover"
             alt={item.product.name}
           />
-          <div className="flex flex-col items-start gap-2">
-            <div className="pl-2 text-lg">{item.product.name}</div>
+          <div className="flex flex-col flex-wrap items-start gap-2 px-2">
+            <div className="text-lg">{item.product.name}</div>
             <Button size="sm" variant="ghost">
               Remove
             </Button>
