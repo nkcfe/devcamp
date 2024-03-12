@@ -12,6 +12,7 @@ import CartTable from './CartTable';
 
 import { CartItemType } from '@/module/type';
 import CartTotal from './CartTotal';
+import LoadingModal from '../modal/LoadingModal';
 
 const CartPage = () => {
   const [customQuantity, setCustomQuantity] = useState(0);
@@ -76,7 +77,7 @@ const CartPage = () => {
   }, [cartItems]);
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <LoadingModal />;
   }
 
   const totalPrice = cartItems?.reduce(
