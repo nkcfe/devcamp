@@ -3,39 +3,36 @@
 import React, { useEffect, useState } from 'react';
 
 import axios from 'axios';
-import {
-  Table,
-  TableBody,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '../ui/table';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useToast } from '../ui/use-toast';
 
 import CartFooter from './CartFooter';
-import CartItem from './CartItem';
-import Empty from './Empty';
-import { Progress } from '../ui/progress';
+import CartBanner from './CartBanner';
+import CartTable from './CartTable';
 
-const tableHead = ['PRODUCT', 'QUANTITY', 'PRICE', 'ORDER', 'SUBTOTAL'];
+import { CartItemType } from '@/module/type';
+import CartTotal from './CartTotal';
+import LoadingModal from '../modal/LoadingModal';
 
 const CartPage = () => {
   const [customQuantity, setCustomQuantity] = useState(0);
   const [progress, setProgress] = useState(0);
+  const [currentShpping] = useState(progress === 100 ? 0 : 2500);
+  const { toast } = useToast();
 
-  console.log(progress);
-
-  const { data: cartItems, isLoading } = useQuery({
-    queryKey: ['cart'],
-    queryFn: async () => {
-      const response = await axios.get('/api/cart');
-      return response.data;
+  const { data: cartItems, isLoading } = useQuery<any, unknown, CartItemType[]>(
+    {
+      queryKey: ['cart'],
+      queryFn: async () => {
+        const response = await axios.get('/api/cart');
+        return response.data;
+      },
     },
-  });
+  );
 
   const queryClient = useQueryClient();
 
-  const { mutate } = useMutation({
+  const { mutate: updateMutate } = useMutation({
     mutationFn: async ({
       productId,
       customQuantity,
@@ -48,15 +45,28 @@ const CartPage = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['cart'] });
       setCustomQuantity(0);
+      toast({
+        title: '수량이 변경되었습니다.',
+        description: '카트가 업데이트 되었습니다.',
+      });
+    },
+  });
+
+  const { mutate: deleteMutate } = useMutation({
+    mutationFn: async (productId: string) => {
+      await axios.delete('/api/cart', { data: { productId } });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['cart'] });
+      toast({
+        title: '상품이 삭제되었습니다.',
+        description: '카트가 업데이트 되었습니다',
+      });
     },
   });
 
   useEffect(() => {
     if (cartItems) {
-      const totalQuantity = cartItems.reduce(
-        (acc: number, item: any) => acc + item.quantity,
-        0,
-      );
       const totalPrice = cartItems.reduce(
         (acc: number, item: any) => acc + item.quantity * item.product.price,
         0,
@@ -67,15 +77,15 @@ const CartPage = () => {
   }, [cartItems]);
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <LoadingModal />;
   }
 
-  const totalPrice = cartItems.reduce(
+  const totalPrice = cartItems?.reduce(
     (acc: number, item: any) => acc + item.quantity * item.product.price,
     0,
   );
 
-  const totalQuantity = cartItems.reduce(
+  const totalQuantity = cartItems?.reduce(
     (acc: number, item: any) => acc + item.quantity,
     0,
   );
@@ -95,40 +105,26 @@ const CartPage = () => {
   return (
     <div className="flex items-center justify-center ">
       <div className="mt-40 flex flex-col items-center justify-start lg:max-w-6xl">
-        <div className="flex flex-col items-center justify-center">
-          <div className="text-5xl">SHOPPING CART</div>
-          <div className="mt-12">
-            Shop for 1,000,000₩ more to enjoy FREE Shipping
-          </div>
-          <Progress value={progress} className="mt-6" />
-        </div>
+        <CartBanner progress={progress} />
 
-        <div className="mt-12 w-full">
-          {cartItems.length === 0 ? (
-            <Empty />
-          ) : (
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  {tableHead.map((head) => (
-                    <TableHead key={head}>{head}</TableHead>
-                  ))}
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {cartItems.map((item: any, index: number) => (
-                  <CartItem
-                    key={index}
-                    item={item}
-                    customQuantity={customQuantity}
-                    handleQuantity={handleQuantity}
-                    mutate={mutate}
-                    resetQuantity={resetQuantity}
-                  />
-                ))}
-              </TableBody>
-            </Table>
-          )}
+        <div className="mt-12 min-w-[72rem]">
+          <div className="flex flex-col">
+            <div className="mb-4 p-2 text-3xl">CART LIST</div>
+            <CartTable
+              cartItems={cartItems}
+              customQuantity={customQuantity}
+              handleQuantity={handleQuantity}
+              updateMutate={updateMutate}
+              resetQuantity={resetQuantity}
+              deleteMutate={deleteMutate}
+            />
+
+            <div className="mb-4 mt-20 p-2 text-3xl">CART TOTALS</div>
+            <CartTotal
+              totalPrice={totalPrice}
+              currentShpping={currentShpping}
+            />
+          </div>
         </div>
 
         <CartFooter totalQuantity={totalQuantity} totalPrice={totalPrice} />

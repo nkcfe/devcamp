@@ -57,7 +57,7 @@ const Point = (props: PointProps) => {
   }
 
   return (
-    <Card>
+    <Card className="rounded-none">
       <CardHeader>
         <CardTitle>포인트</CardTitle>
       </CardHeader>

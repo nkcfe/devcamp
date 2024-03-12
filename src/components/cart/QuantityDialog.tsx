@@ -41,7 +41,7 @@ const QuantityDialog = (props: QuantityDialogProps) => {
       }}
     >
       <DialogTrigger>
-        <Button variant="secondary" size="xs">
+        <Button variant="link" size="xs" className="text-blue-600">
           옵션 수정
         </Button>
       </DialogTrigger>

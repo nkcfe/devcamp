@@ -24,7 +24,7 @@ const Summary = (props: SummaryProps) => {
 
   return (
     <>
-      <Card>
+      <Card className="rounded-none">
         <CardHeader>
           <CardTitle>최종 결제금액</CardTitle>
           <CardContent className="">
@@ -69,7 +69,7 @@ const Summary = (props: SummaryProps) => {
           포인트 적립예정
         </div>
         <Button
-          className="w-full rounded-t-none py-8 text-xl"
+          className="w-full rounded-none py-8 text-xl"
           size="lg"
           type="submit"
         >

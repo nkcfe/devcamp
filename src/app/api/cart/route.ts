@@ -155,5 +155,41 @@ export async function PUT(request: Request) {
 }
 
 export async function DELETE(request: Request) {
-  return new Response('Hello, world!');
+  const { productId } = await request.json();
+
+  const session = await getServerSession(authOptions);
+  if (!session) {
+    return new Response('Not logged in', { status: 401 });
+  }
+
+  const user = await prisma.user.findUnique({
+    where: { email: session.user?.email as string },
+    select: { cartId: true },
+  });
+
+  if (!user || !user.cartId) {
+    return new Response('User cart not found', { status: 404 });
+  }
+
+  const cartItem = await prisma.cartItem.findFirst({
+    where: {
+      cartId: user.cartId,
+      productId,
+    },
+  });
+
+  try {
+    if (cartItem) {
+      await prisma.cartItem.delete({
+        where: { cartItemId: cartItem.cartItemId },
+      });
+
+      return new Response('Cart item deleted', { status: 200 });
+    } else {
+      return new Response('Cart item not found', { status: 404 });
+    }
+  } catch (error) {
+    console.error('Error deleting cart item:', error);
+    return new Response('Internal server error', { status: 500 });
+  }
 }

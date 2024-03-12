@@ -48,11 +48,19 @@ model User {
   hashedPassword String?
   image          String?
   cartId         String?      @unique
-  point          Int          @default(10000)
   accounts       Account[]
   sessions       Session[]
   userCoupons    UserCoupon[]
   cart           Cart?
+  Point          Point[]
+}
+
+model Point {
+  pointId   String   @id @default(cuid())
+  userId    String
+  amount    Int      @default(0)
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id])
 }
 
 enum CouponType {
