@@ -1,7 +1,5 @@
 'use client';
 
-import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import OrderProductionInfo from './OrderProductionInfo';
 import OrdererInfo from './OrdererInfo';
@@ -15,6 +13,7 @@ import Summary from './Summary';
 import type { OrderProductType, UserCouponType } from '@/module/type';
 import Point from './coupon/Point';
 import { loadTossPayments } from '@tosspayments/payment-sdk';
+import { useToast } from '../ui/use-toast';
 
 interface PayPageProps {
   cartItems: { cartItems: OrderProductType[]; totalPrice: number };
@@ -25,6 +24,8 @@ const PayPage = (props: PayPageProps) => {
   const { cartItems } = props.cartItems;
   const totalPrice = props.cartItems.totalPrice;
   const user = data?.user;
+
+  const { toast } = useToast();
 
   const [applyCoupon, setApplyCoupon] = useState<UserCouponType | null>(null);
   const [applyPoint, setApplyPoint] = useState(0);
@@ -83,6 +84,14 @@ const PayPage = (props: PayPageProps) => {
   };
 
   const handleApplyCoupon = (coupon: UserCouponType) => {
+    if (applyPoint) {
+      setApplyPoint(0);
+      toast({
+        title: '결제 금액이 변경되었습니다.',
+        description: '포인트 금액을 다시 설정해주세요.',
+        variant: 'destructive',
+      });
+    }
     if (coupon.type === 'PERCENTAGE') {
       const discountPrice = getCouponDiscount(coupon);
       setPaymentPrice(paymentPrice - discountPrice);

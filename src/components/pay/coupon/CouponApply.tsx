@@ -46,11 +46,11 @@ const CouponApply = (props: CouponApplyProps) => {
       });
     }
 
-    handleApplyCoupon(JSON.parse(coupon));
     toast({
       title: '쿠폰이 적용되었습니다.',
       duration: 2000,
     });
+    handleApplyCoupon(JSON.parse(coupon));
   };
 
   const handleCouponCancle = () => {
