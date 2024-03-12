@@ -25,6 +25,15 @@ export const getProduct = cache(async (id: string) => {
     where: {
       productId: id,
     },
+    select: {
+      productId: true,
+      name: true,
+      price: true,
+      image: true,
+      description: true,
+      category: true,
+      detail: true,
+    },
   });
 
   if (!product) return null;

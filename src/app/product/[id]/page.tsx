@@ -3,7 +3,7 @@ import prisma from '@/db';
 import { notFound } from 'next/navigation';
 import DetailPage from '../../../components/detail/DetailPage';
 
-interface ProcuctProps {
+interface ProductProps {
   params: { id: string };
 }
 
@@ -16,7 +16,7 @@ export const generateStaticParams = async () => {
   return response.map(({ productId }) => ({ params: { id: productId.toString() } }));
 };
 
-export default async function Product({ params }: ProcuctProps) {
+export default async function Product({ params }: ProductProps) {
   const product = await getProduct(params.id);
   if (!product) return notFound();
   return <DetailPage product={product} />;

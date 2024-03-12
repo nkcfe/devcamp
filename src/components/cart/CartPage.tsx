@@ -1,13 +1,11 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import axios from 'axios';
 import {
   Table,
   TableBody,
-  TableCell,
-  TableFooter,
   TableHead,
   TableHeader,
   TableRow,
@@ -17,11 +15,16 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import CartFooter from './CartFooter';
 import CartItem from './CartItem';
 import Empty from './Empty';
+import { Progress } from '../ui/progress';
 
-const tableHead = ['제품', '수량', '가격', '주문 관리', '합계'];
+const tableHead = ['PRODUCT', 'QUANTITY', 'PRICE', 'ORDER', 'SUBTOTAL'];
 
 const CartPage = () => {
   const [customQuantity, setCustomQuantity] = useState(0);
+  const [progress, setProgress] = useState(0);
+
+  console.log(progress);
+
   const { data: cartItems, isLoading } = useQuery({
     queryKey: ['cart'],
     queryFn: async () => {
@@ -47,7 +50,25 @@ const CartPage = () => {
       setCustomQuantity(0);
     },
   });
-  if (isLoading) return <div>Loading...</div>;
+
+  useEffect(() => {
+    if (cartItems) {
+      const totalQuantity = cartItems.reduce(
+        (acc: number, item: any) => acc + item.quantity,
+        0,
+      );
+      const totalPrice = cartItems.reduce(
+        (acc: number, item: any) => acc + item.quantity * item.product.price,
+        0,
+      );
+      const currentProgress = (totalPrice / 1000000) * 100;
+      setProgress(currentProgress > 100 ? 100 : currentProgress);
+    }
+  }, [cartItems]);
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
   const totalPrice = cartItems.reduce(
     (acc: number, item: any) => acc + item.quantity * item.product.price,
@@ -72,59 +93,46 @@ const CartPage = () => {
   };
 
   return (
-    <div className="container mt-28 flex flex-col items-center justify-start">
-      <div className="flex w-96 flex-col items-center justify-center">
-        <div className="text-4xl font-bold">장바구니</div>
-        {/* <div className="mt-12">Shop for $34 more to enjoy FREE Shipping</div>
-        <Progress value={50} className="mt-6" /> */}
-      </div>
+    <div className="flex items-center justify-center ">
+      <div className="mt-40 flex flex-col items-center justify-start lg:max-w-6xl">
+        <div className="flex flex-col items-center justify-center">
+          <div className="text-5xl">SHOPPING CART</div>
+          <div className="mt-12">
+            Shop for 1,000,000₩ more to enjoy FREE Shipping
+          </div>
+          <Progress value={progress} className="mt-6" />
+        </div>
 
-      <div className="mt-12 w-full">
-        {cartItems.length === 0 ? (
-          <Empty />
-        ) : (
-          <Table>
-            <TableHeader>
-              <TableRow>
-                {tableHead.map((head) => (
-                  <TableHead key={head}>{head}</TableHead>
+        <div className="mt-12 w-full">
+          {cartItems.length === 0 ? (
+            <Empty />
+          ) : (
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  {tableHead.map((head) => (
+                    <TableHead key={head}>{head}</TableHead>
+                  ))}
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {cartItems.map((item: any, index: number) => (
+                  <CartItem
+                    key={index}
+                    item={item}
+                    customQuantity={customQuantity}
+                    handleQuantity={handleQuantity}
+                    mutate={mutate}
+                    resetQuantity={resetQuantity}
+                  />
                 ))}
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {cartItems.map((item: any, index: number) => (
-                <CartItem
-                  key={index}
-                  item={item}
-                  customQuantity={customQuantity}
-                  handleQuantity={handleQuantity}
-                  mutate={mutate}
-                  resetQuantity={resetQuantity}
-                />
-              ))}
-            </TableBody>
-            <TableFooter>
-              <TableRow>
-                <TableCell colSpan={3}></TableCell>
-                <TableCell>총 상품금액</TableCell>
-                <TableCell>{totalPrice.toLocaleString()}원</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell colSpan={3}></TableCell>
-                <TableCell>배송비</TableCell>
-                <TableCell>무료</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell colSpan={3}></TableCell>
-                <TableCell>총 결제금액</TableCell>
-                <TableCell>{totalPrice.toLocaleString()}원</TableCell>
-              </TableRow>
-            </TableFooter>
-          </Table>
-        )}
-      </div>
+              </TableBody>
+            </Table>
+          )}
+        </div>
 
-      <CartFooter totalQuantity={totalQuantity} totalPrice={totalPrice} />
+        <CartFooter totalQuantity={totalQuantity} totalPrice={totalPrice} />
+      </div>
     </div>
   );
 };
