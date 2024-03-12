@@ -17,11 +17,19 @@ interface CartItemProps {
   customQuantity: number;
   handleQuantity: (type: string) => void;
   mutate: (args: { productId: string; customQuantity: number }) => void;
+  deleteMutate: (productId: string) => void;
   resetQuantity: () => void;
 }
 
 const CartItem = (props: CartItemProps) => {
-  const { item, customQuantity, handleQuantity, mutate, resetQuantity } = props;
+  const {
+    item,
+    customQuantity,
+    handleQuantity,
+    mutate,
+    resetQuantity,
+    deleteMutate,
+  } = props;
   return (
     <TableRow>
       <TableCell className="font-medium">
@@ -36,7 +44,11 @@ const CartItem = (props: CartItemProps) => {
           />
           <div className="flex flex-col flex-wrap items-start gap-2 px-2">
             <div className="text-lg">{item.product.name}</div>
-            <Button size="sm" variant="ghost">
+            <Button
+              size="sm"
+              variant="ghost"
+              onClick={() => deleteMutate(item.productId)}
+            >
               Remove
             </Button>
           </div>
