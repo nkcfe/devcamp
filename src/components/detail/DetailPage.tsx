@@ -9,11 +9,28 @@ import DrawerPage from './DrawerPage';
 import { Dialog, DialogContent, DialogTrigger } from '../ui/dialog';
 import { Button } from '../ui/button';
 import AuthPage from '../auth/AuthPage';
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from '../ui/breadcrumb';
+import { MinusIcon, PlusIcon } from 'lucide-react';
 
 const MAX_COUNT = 10;
 const MIN_COUNT = 1;
 
-const DetailPage = ({ productId, name, price, image }: ProductType) => {
+const DetailPage = ({
+  productId,
+  name,
+  price,
+  image,
+  description,
+  detail,
+  category,
+}: ProductType) => {
   const [quantity, setQuantity] = useState(MIN_COUNT);
   const [open, setOpen] = useState(false);
   const { toast } = useToast();
@@ -42,37 +59,91 @@ const DetailPage = ({ productId, name, price, image }: ProductType) => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-start">
-      <div className="flex h-screen flex-col items-center justify-center">
-        <Image src={image} alt={name} width={600} height={600} priority />
-        <div className="mt-6 text-xl font-semibold">{name}</div>
-        <div>{price.toLocaleString()}원</div>
-      </div>
+    <div className="mt-28 flex items-center justify-center">
+      <div className="w-full lg:max-w-6xl">
+        <Breadcrumb>
+          <BreadcrumbList className="text-xs">
+            <BreadcrumbItem>
+              <BreadcrumbLink href="/">Home</BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbPage>{name}</BreadcrumbPage>
+            </BreadcrumbItem>
+          </BreadcrumbList>
+        </Breadcrumb>
 
-      {/* <TabPage /> */}
-
-      <div className="fixed bottom-0 z-[99] flex h-20 w-screen items-center justify-end gap-3 border-t bg-background">
-        <div>총 상품금액 ({quantity}개)</div>
-        <div className="mr-4 text-2xl font-bold">
-          {(price * quantity).toLocaleString()}원
+        <div className="mt-10 flex items-start justify-center gap-10">
+          <Image
+            src={image}
+            alt={name}
+            width={500}
+            height={500}
+            priority
+            className="shrink-0"
+          />
+          <div className="flex flex-col items-start justify-between gap-4">
+            <div className="mt-6 text-4xl ">{name}</div>
+            <div className="text-2xl">₩{price.toLocaleString()}</div>
+            <div className="w-96 text-sm">{description}</div>
+            <div className="w-96 text-sm">
+              <span className="font-semibold">Categories: </span>
+              {category}
+            </div>
+            <div className="mt-4 flex w-36 items-center justify-center">
+              <Button
+                variant="outline"
+                size="icon"
+                className="size-8 shrink-0 rounded-full"
+                onClick={subtractQuantity}
+              >
+                <MinusIcon className="size-4" />
+                <span className="sr-only">Decrease</span>
+              </Button>
+              <div className="flex-1 text-center">
+                <div className="tracking-tighter">{quantity}개</div>
+              </div>
+              <Button
+                variant="outline"
+                size="icon"
+                className="size-8 shrink-0 rounded-full"
+                onClick={addQuantity}
+              >
+                <PlusIcon className="size-4" />
+                <span className="sr-only">Increase</span>
+              </Button>
+            </div>
+            <Button
+              // onClick={handleAddToCart}
+              className="w-36"
+            >
+              장바구니
+            </Button>
+          </div>
         </div>
-        <DrawerPage
-          productId={productId}
-          quantity={quantity}
-          addQuantity={addQuantity}
-          subtractQuantity={subtractQuantity}
-          handleOpen={handleOpen}
-        />
-      </div>
 
-      <Dialog open={open} onOpenChange={(open) => setOpen(open)}>
-        <DialogTrigger>
-          <Button variant="outline">Login</Button>
-        </DialogTrigger>
-        <DialogContent className="mx-0 flex w-auto items-center justify-center">
-          <AuthPage />
-        </DialogContent>
-      </Dialog>
+        <hr className="my-10" />
+
+        <div className="fixed bottom-0 z-[99] flex h-20 w-screen items-center justify-end gap-3 border-t bg-background">
+          <div>총 상품금액 ({quantity}개)</div>
+          <div className="mr-4 text-2xl font-bold">
+            {(price * quantity).toLocaleString()}원
+          </div>
+          <DrawerPage
+            productId={productId}
+            quantity={quantity}
+            addQuantity={addQuantity}
+            subtractQuantity={subtractQuantity}
+            handleOpen={handleOpen}
+          />
+        </div>
+
+        <Dialog open={open} onOpenChange={(open) => setOpen(open)}>
+          <DialogContent className="mx-0 flex w-auto items-center justify-center">
+            <AuthPage />
+          </DialogContent>
+        </Dialog>
+      </div>
     </div>
   );
 };
