@@ -3,7 +3,6 @@ import { Card, CardContent, CardHeader, CardTitle } from '../../ui/card';
 import CouponApply from './CouponApply';
 import CouponRegistration from './CouponRegistration';
 
-
 interface CouponProps {
   handleApplyCoupon: (coupon: string) => void;
   handleCancleCoupon: () => void;
@@ -12,10 +11,8 @@ interface CouponProps {
 const Coupon = (props: CouponProps) => {
   const { handleApplyCoupon, handleCancleCoupon } = props;
 
-  
-
   return (
-    <Card>
+    <Card className="rounded-none">
       <CardHeader>
         <CardTitle>쿠폰</CardTitle>
       </CardHeader>

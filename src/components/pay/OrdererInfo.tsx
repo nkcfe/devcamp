@@ -20,7 +20,7 @@ const OrdererInfo = (props: OrdererInfoProps) => {
   const { OrderForm } = props;
 
   return (
-    <Card>
+    <Card className="rounded-none">
       <CardHeader>
         <CardTitle>주문자 정보</CardTitle>
       </CardHeader>

@@ -10,7 +10,7 @@ interface OrderProductionInfoProps {
 const OrderProductionInfo = (props: OrderProductionInfoProps) => {
   const { cartItems } = props;
   return (
-    <Card>
+    <Card className="rounded-none">
       <CardHeader>
         <CardTitle>주문 상품 정보</CardTitle>
       </CardHeader>

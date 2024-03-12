@@ -66,7 +66,7 @@ const DeliveryInfo = (props: DeliveryInfoProps) => {
   }, [OrderForm.watch().deliveryMemo]);
 
   return (
-    <Card>
+    <Card className="rounded-none">
       <CardHeader>
         <CardTitle>배송지 정보</CardTitle>
       </CardHeader>

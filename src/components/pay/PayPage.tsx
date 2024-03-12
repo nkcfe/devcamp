@@ -12,7 +12,6 @@ import { OrderType, ordererSchema } from '@/validators/orderer';
 import DeliveryInfo from './DeliveryInfo';
 import Coupon from './coupon';
 import Summary from './Summary';
-import Payment from './Payment';
 import { CartItemType } from '@/module/type';
 import Point from './coupon/Point';
 import { loadTossPayments } from '@tosspayments/payment-sdk';
@@ -65,13 +64,13 @@ const PayPage = () => {
   };
 
   const handleSubmit = async (data: OrderType) => {
+    if (!cartItems) return;
+
     const tossPayments = await loadTossPayments(
       process.env.NEXT_PUBLIC_TOSS_CLIENT_KEY as string,
     );
 
     const finalPrice = totalPrice! - getCouponDiscount() - applyPoint;
-
-    if (!cartItems) return;
 
     await tossPayments.requestPayment('카드', {
       amount: finalPrice,
@@ -105,9 +104,10 @@ const PayPage = () => {
   );
 
   return (
-    <div className="min-h-screen bg-secondary py-28">
-      <div className="mx-auto flex flex-col items-center justify-start lg:max-w-4xl">
-        <div className="text-4xl font-bold">결제하기</div>
+    <div className="min-h-screen bg-background py-28">
+      <div className="mx-auto flex flex-col items-center justify-start lg:max-w-6xl">
+        <div className="mt-20 text-5xl">CHECKOUT</div>
+
         <form
           onSubmit={OrderForm.handleSubmit(handleSubmit)}
           className="mt-20 grid w-full grid-cols-5 gap-6"
