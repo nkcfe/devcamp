@@ -5,8 +5,7 @@ import type { ProductType } from '@/module/type';
 
 import React, { useState } from 'react';
 import DrawerPage from './DrawerPage';
-import { Dialog, DialogContent, DialogTrigger } from '../ui/dialog';
-import { Button } from '../ui/button';
+import { Dialog, DialogContent } from '../ui/dialog';
 import AuthPage from '../auth/AuthPage';
 
 import BreadCrumbPage from './BreadCrumbPage';

@@ -1,99 +1,66 @@
-# 배포 서버
-쇼핑몰 + 회원가입 + 로그인 구현 진행중 (03. 07 업데이트)
-<a href="https://devcamp-two.vercel.app/">vercel 배포 링크</a>
+### 배포 서버
+<a href="https://devcamp-two.vercel.app/">Preview</a>
 
-## 회원가입 폼 구현해보기 (1일차)
-
-### 학습 내용
-1. tailwind 유틸 함수 세팅 방법 <a href="https://fe-feed.vercel.app/posts/33">블로그 링크</a>
-- eslint, prettier 세팅
-- Next.js에서 tailwind를 추천하는 이유
-- twMerge와 cva를 함께 사용해주는 커스텀 유틸함수 생성 방법.
+### 프로젝트 소개
+Next.js를 활용한 풀스택 쇼핑몰 웹사이트 구현
 
 
-2. shadcn/ui 사용방법 <a href="https://fe-feed.vercel.app/posts/34">블로그 링크</a>
-- 재사용 가능한 컴포넌트의 장점 및 사용 방법
+### 목적
+- Next.js app router와 api route 학습
+- next auth를 활용한 인증 시스템 학습
+- toss payments를 활용한 결제 시스템 학습
+- 장바구니, 쿠폰, 포인트 등 결제 로직 학습
+- shadcn/ui + zod를 활용한 스타일링 및 유효성 검증 학습
 
 
-3. zod 사용방법 <a href="https://fe-feed.vercel.app/posts/35">블로그 링크</a>
-- 타입스크립트 기반의 스키마 유효성 검사 라이브러리의 장점 및 사용 방법
+### 구현 범위
+- next-auth를 활용한 소셜로그인 및 이메일 로그인
+- 장바구니 시스템
+- 쿠폰 및 포인트 적용 시스템
+- kakao 주소 검색 api를 활용한 배송지 정보 검색
+- toss payments api를 활용한 결제 시스템 구축 (진행중)
 
 
-## 예시 코드 확인해보기 (2일차)
+### 기술 스택
+- Typescrip + React + Next.js
+- Prisma + PostgreSQL
+- Tailwind + Framer Motion + Shadcd/ui + headless/ui
+- Tanstack-Query + axios
+- Zustand
+- Next-Auth
+- zod
 
-### 학습내용
-1. shadcn/ui를 활용한 다크모드 구현하기 <a href="https://fe-feed.vercel.app/posts/42">블로그 링크</a>
-- Next.js의 themeProvider 사용방법 학습
-- shadcn/ui의 dropdown 메뉴 사용 방법
+### 주요 기능
+- 인증
+  - next-auth를 활용한 인증 시스템 구현
+  - 구글, 깃허브, 네이버, 이메일을 이용한 회원가입 및 인증
+  - jwt토큰을 활용한 인증 시스템 및 리프레시 토큰으로 엑세스 토큰 발급
 
-2. shadcn/ui를 활용한 토스트 구현하기 <a href="https://fe-feed.vercel.app/posts/44">블로그 링크</a>
-- react-toastify에서 shadcn/ui toast로 교체
+- 장바구니
+  - 회원만 사용 가능.
+  - 최초 장바구니 사용 시 장바구니 테이블 생성
+  - 기존 장바구니가 있을 경우 장바구니 테이블 업데이트
 
-3. shadcn/ui 분석 - forwardRef 사용방법 및 사용이유 <a href="https://fe-feed.vercel.app/posts/43">블로그 링크</a>
-- forwardRef의 사용 방법 및 사용 이유 학습
-- React의 렌더링 방법과 ref의 연관관계 학습
+- 주소 검색
+  - kakao 주소 검색 api를 활용한 배송지 정보 검색 및 입력
 
+- 포인트
+  - 회원가입시 최초 10,000 포인트 지급
+  - 결제 시 최종 결제 금액의 1%적립
+  - 포인트가 최종 결제 금액보다 많을 경우 최종 결제금액까지만 사용 가능
+  - 쿠폰이 등록될 경우 포인트는 다시 설정
 
-## 회원가입 폼 구현해보기 (3일차)
-
-### 학습내용
-1. Next.js + Prisma + PostgreSQL 데이터 베이스 연결하기 <a href="https://fe-feed.vercel.app/posts/45">블로그 링크</a>
-- Next.js의 서버리스 특성을 살려 풀스택 웹페이지를 만드는 방법 학습
-
-2. Next.js의 API Route 학습 <a href="https://fe-feed.vercel.app/posts/46">블로그 링크</a>
-- 핵심 기능 및 단점 학습
-- page router & app router 차이점 학습
-
-3. 인증, 인가, 쿠키, 세션, JWT 토큰 학습 <a href="https://fe-feed.vercel.app/posts/48">블로그 링크</a>
-- 인증과 인가의 차이점
-- 인증 방식의 종류와 장단점 (쿠키, 세션, 토큰) 
-- JWT 토큰의 개념과 구조, 작동 방법 및 장단점 학습
-- Refresh 토큰의 역할 학습
-
-4. Access Token & Refresh Token <a href="https://fe-feed.vercel.app/posts/50">블로그 링크</a>
-- 함께 사용하게 된 배경과 사용 프로세스 학습
-- Refresh 토큰의 안정성과 추가적인 보안방법 Refresh Token Rotate 학습
-
-5. bcrypt로 비밀번호 해싱 <a href="https://fe-feed.vercel.app/posts/51">블로그 링크</a>
-- 해싱과 솔팅의 개념
-- bcrypt의 작동 방식
-- 라이브러리를 활용한 적용
-
-6. Next-Auth <a href="https://fe-feed.vercel.app/posts/47">블로그 링크1</a><a href="https://fe-feed.vercel.app/posts/49">블로그 링크2</a>
-- Next Auth의 인증 방식과 특징과 작동 방식 학습
-- Next Auth를 활용한 소셜로그인 (구글, 깃허브, 네이버) 및 Credential 로그인 구현
-- 미들웨어를 활용하는 방법
-
-
-## 쇼핑몰 구현하기 (4일차)
-
-### 학습내용
-1. shadcn을 이용한 쇼핑몰 페이지 스타일링
-아래 컴포넌트 활용
-- Dropdown
-- Drawer
-- Dialog
-- Carousel
-- Tab
-
-2. Prisma + Supabase로 Data Seed 작업 진행
-- 하드코딩한 목업데이터를 데이터베이스로 이관작업
-
-3. SSG, SSR, cache를 학습 및 활용해보기
-- 상세페이지 product : 데이터가 변동될 일이 거의 없기 떄문에 SSG를 활용
-- 메인페이지 products : 데이터가 추가되거나 삭제될 일이 있기 때문에 SSR을 활용.
-- React Server Component에서 도입된 cache로 최적화 진행
-
-
-## 2주차 day1
-
-### 학습내용
-1. 장바구니 구현
-- 회원 장바구니 구현 (회원별 고유한 장바구니 생성)
-- 수량 수정 기능 및 삭제 기능 구현
-
-2. 결제 페이지 구현
-- kakao 주소 검색 api를 활용한 주소 검색 기능 구현
-- 정률제, 정액제 쿠폰 적용 기능 추가
-- 포인트 기능 추가
-- toss payments api 연결
+- 쿠폰 
+  - 쿠폰은 정액제 (3000원 할인), 정률제 (30%할인)으로 구성
+  - 관리자가 등록한 쿠폰 코드만 사용 가능 (현재 아래 등록된 쿠폰만 사용 가능)
+    - helloworld_fixed (3000원 할인 쿠폰)
+    - helloworld_percentage (30% 할인 쿠폰)
+  - 사용자는 관리자가 지급한 쿠폰 코드로 적용 가능
+  - 만료 기한을 넘길 경우 쿠폰 사용 불가
+  - 포인트보다 쿠폰 선적용 시스템 (정률제의 경우 최종 결제 금액 차이가 있기 때문)
+  
+- 결제 시스템
+  - toss payments api를 활용한 결제 시스템
+  - 최종 결제한 유저의 결제 데이터는 db로 관리
+  - 결제시 사용한 포인트, 쿠폰은 소멸
+  - 현재 진행 중 (결제 에러 페이지, 결제 성공 페이지, 마이페이지)

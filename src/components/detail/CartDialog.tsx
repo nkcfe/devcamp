@@ -18,7 +18,7 @@ const CartDialog = (props: CartDialogProps) => {
   return (
     <AlertDialog
       open={isCartAlertOpen}
-      onOpenChange={(open) => setIsCartAlertOpen(open)}d
+      onOpenChange={(open) => setIsCartAlertOpen(open)}
     >
       <AlertDialogContent className="flex w-[320px] flex-col items-center justify-center">
         <AlertDialogTitle className="mb-10">

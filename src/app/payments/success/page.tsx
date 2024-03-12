@@ -13,20 +13,6 @@ export default async function Page({ searchParams }: any) {
   ).then((res) => res.json());
 
   const { card } = payments;
-  return (
-    <div className="mt-20">
-      <h1>결제가 완료되었습니다</h1>
-      <ul>
-        <li>결제 상품 {payments.orderName}</li>
-        <li>주문번호 {payments.orderId} </li>
-        <li>카드회사 {card.company}</li>
-        <li>카드번호 {card.number}</li>
-        <li>결제금액 {card.amount}</li>
-        <li>
-          결제승인날짜{' '}
-          {Intl.DateTimeFormat().format(new Date(payments.approvedAt))}
-        </li>
-      </ul>
-    </div>
-  );
+
+  return <div></div>;
 }
