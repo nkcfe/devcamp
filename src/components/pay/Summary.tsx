@@ -17,10 +17,17 @@ interface SummaryProps {
   getCouponDiscount: (coupon?: UserCouponType) => number;
   applyPoint: number;
   accuralPoint: number;
+  paymentPrice: number;
 }
 
 const Summary = (props: SummaryProps) => {
-  const { totalPrice, getCouponDiscount, applyPoint, accuralPoint } = props;
+  const {
+    totalPrice,
+    getCouponDiscount,
+    applyPoint,
+    accuralPoint,
+    paymentPrice,
+  } = props;
 
   return (
     <>
@@ -53,12 +60,7 @@ const Summary = (props: SummaryProps) => {
           <div className="flex w-full justify-between">
             <div className="text-gray-800">총 결제금액</div>
             <div className="font-bold text-blue-500">
-              {(
-                totalPrice! -
-                getCouponDiscount() -
-                applyPoint
-              ).toLocaleString()}
-              원
+              {paymentPrice.toLocaleString()}원
             </div>
           </div>
         </CardFooter>

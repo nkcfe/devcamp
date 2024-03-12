@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import OrderProductionInfo from './OrderProductionInfo';
 import OrdererInfo from './OrdererInfo';
 import { useSession } from 'next-auth/react';
@@ -49,23 +49,26 @@ const PayPage = (props: PayPageProps) => {
     },
   });
 
-  const getCouponDiscount = (coupon?: UserCouponType) => {
-    if (coupon) {
-      if (coupon.type === 'PERCENTAGE') {
-        return totalPrice * (coupon.discount / 100);
+  const getCouponDiscount = useCallback(
+    (coupon?: UserCouponType) => {
+      if (coupon) {
+        if (coupon.type === 'PERCENTAGE') {
+          return totalPrice * (coupon.discount / 100);
+        } else {
+          return coupon.discount;
+        }
       } else {
-        return coupon.discount;
-      }
-    } else {
-      if (!applyCoupon) return 0;
+        if (!applyCoupon) return 0;
 
-      if (applyCoupon?.type === 'PERCENTAGE') {
-        return totalPrice * (applyCoupon?.discount / 100);
-      } else {
-        return applyCoupon?.discount;
+        if (applyCoupon?.type === 'PERCENTAGE') {
+          return totalPrice * (applyCoupon?.discount / 100);
+        } else {
+          return applyCoupon?.discount;
+        }
       }
-    }
-  };
+    },
+    [applyCoupon, totalPrice],
+  );
 
   const handleSubmit = async (data: OrderType) => {
     if (!cartItems) return;
@@ -115,13 +118,15 @@ const PayPage = (props: PayPageProps) => {
   };
 
   useEffect(() => {
+    setPaymentPrice(totalPrice - getCouponDiscount() - applyPoint);
+  }, [applyPoint, getCouponDiscount, totalPrice]);
+
+  useEffect(() => {
     if (user?.name && user?.email) {
       OrderForm.setValue('name', user?.name);
       OrderForm.setValue('email', user?.email);
     }
   }, [OrderForm, user?.email, user?.name]);
-
-  const couponApplyPrice = paymentPrice - getCouponDiscount();
 
   return (
     <div className="min-h-screen bg-background py-28">
@@ -144,7 +149,7 @@ const PayPage = (props: PayPageProps) => {
               <Point
                 applyPoint={applyPoint}
                 setApplyPoint={setApplyPoint}
-                couponApplyPrice={couponApplyPrice}
+                couponApplyPrice={totalPrice - getCouponDiscount()}
               />
             </div>
           </div>
@@ -156,6 +161,7 @@ const PayPage = (props: PayPageProps) => {
                 getCouponDiscount={getCouponDiscount}
                 applyPoint={applyPoint}
                 accuralPoint={accuralPoint}
+                paymentPrice={paymentPrice}
               />
             </div>
           </div>
