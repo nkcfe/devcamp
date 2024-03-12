@@ -13,12 +13,15 @@ import CartTable from './CartTable';
 import { CartItemType } from '@/module/type';
 import CartTotal from './CartTotal';
 import LoadingModal from '../modal/LoadingModal';
+import { useCartCounts } from '@/store/useCartCounts';
 
 const CartPage = () => {
+  const { toast } = useToast();
+  const { decrementCartCounts } = useCartCounts();
+
   const [customQuantity, setCustomQuantity] = useState(0);
   const [progress, setProgress] = useState(0);
   const [currentShpping] = useState(progress === 100 ? 0 : 2500);
-  const { toast } = useToast();
 
   const { data: cartItems, isLoading } = useQuery<any, unknown, CartItemType[]>(
     {
@@ -58,6 +61,7 @@ const CartPage = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['cart'] });
+      decrementCartCounts();
       toast({
         title: '상품이 삭제되었습니다.',
         description: '카트가 업데이트 되었습니다',

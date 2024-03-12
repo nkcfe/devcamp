@@ -22,6 +22,7 @@ interface PointProps {
 
 const Point = (props: PointProps) => {
   const { setApplyPoint, applyPoint } = props;
+  
   const { data: availablePoint, isLoading } = useQuery({
     queryKey: ['point'],
     queryFn: async () => {

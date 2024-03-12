@@ -16,6 +16,7 @@ import axios from 'axios';
 import DetailAccordion from './DetailAccordion';
 import DetailFooter from './DetailFooter';
 import CartDialog from './CartDialog';
+import { useCartCounts } from '@/store/useCartCounts';
 
 const MAX_COUNT = 10;
 const MIN_COUNT = 1;
@@ -29,6 +30,7 @@ const DetailPage = (props: DetailPageProps) => {
 
   const { toast } = useToast();
   const { status } = useSession();
+  const { incrementCartCounts } = useCartCounts();
 
   const [quantity, setQuantity] = useState(MIN_COUNT);
   const [isAuthOpen, setIsAuthOpen] = useState(false);
@@ -61,6 +63,7 @@ const DetailPage = (props: DetailPageProps) => {
         quantity,
       });
       if (result.status === 200) {
+        incrementCartCounts();
         setIsCartAlertOpen(true);
       }
     } else {

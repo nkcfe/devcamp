@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Button } from '../ui/button';
 import {
   DropdownMenu,
@@ -20,6 +20,10 @@ import { Truculenta } from 'next/font/google';
 import { Dialog, DialogContent, DialogTrigger } from '../ui/dialog';
 import AuthPage from '../auth/AuthPage';
 import { cn } from '@/lib/utils';
+import { useQuery } from '@tanstack/react-query';
+import axios from 'axios';
+import { Badge } from '../ui/badge';
+import { useCartCounts } from '@/store/useCartCounts';
 
 const truculenta = Truculenta({
   weight: ['400', '500', '600', '700', '800', '900'],
@@ -28,7 +32,25 @@ const truculenta = Truculenta({
 
 const NavigationBar = () => {
   const router = useRouter();
-  const { status, data } = useSession();
+  const { status } = useSession();
+  const { cartCounts, setCartCounts } = useCartCounts();
+
+  const { data: cartItemCounts, refetch } = useQuery({
+    queryKey: ['cartItemCounts'],
+    queryFn: async () => {
+      try {
+        const response = await axios.get('/api/cart/count');
+        setCartCounts(response.data);
+        return response.data;
+      } catch (error) {
+        return console.error(error);
+      }
+    },
+  });
+
+  useEffect(() => {
+    refetch();
+  }, [refetch, status]);
 
   return (
     <div className="fixed top-0 z-30 flex w-screen items-center justify-center bg-background/40 backdrop-blur-lg">
@@ -40,27 +62,36 @@ const NavigationBar = () => {
           </Link>
         </div>
         <div className="flex gap-2">
-          <Button variant="outline" onClick={() => router.push('/cart')}>
-            <FiShoppingCart className="size-[1.2rem]" />
-          </Button>
           <ModeToggle />
           {status === 'authenticated' ? (
-            <DropdownMenu>
-              <DropdownMenuTrigger>
-                <Button variant="outline">
-                  <FiUser className="size-[1.2rem]" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent>
-                <DropdownMenuItem onClick={() => router.push('/mypage')}>
-                  My page
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={() => signOut()}>
-                  Logout
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+            <>
+              <Button
+                variant="outline"
+                onClick={() => router.push('/cart')}
+                className="relative"
+              >
+                <FiShoppingCart className="size-[1.2rem]" />
+                <Badge className="absolute right-[-8px] top-[-8px] size-5 justify-center rounded-full p-1">
+                  {cartCounts}
+                </Badge>
+              </Button>
+              <DropdownMenu>
+                <DropdownMenuTrigger>
+                  <Button variant="outline">
+                    <FiUser className="size-[1.2rem]" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent>
+                  <DropdownMenuItem onClick={() => router.push('/mypage')}>
+                    My page
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem onClick={() => signOut()}>
+                    Logout
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </>
           ) : (
             <Dialog>
               <DialogTrigger>
