@@ -19,5 +19,5 @@ export const generateStaticParams = async () => {
 export default async function Product({ params }: ProcuctProps) {
   const product = await getProduct(params.id);
   if (!product) return notFound();
-  return <DetailPage {...product} />;
+  return <DetailPage product={product} />;
 }
