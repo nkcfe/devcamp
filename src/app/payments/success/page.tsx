@@ -1,6 +1,8 @@
 import SuccessPage from '@/components/pay/SuccessPage';
 import axios from 'axios';
 
+import prisma from '@/db';
+
 interface Payment {
   orderName: string;
   approvedAt: string;
@@ -22,6 +24,16 @@ export default async function Page({ searchParams }: { searchParams: any }) {
     headers: {
       Authorization: `Basic ${basicToken}`,
       'Content-Type': 'application/json',
+    },
+  });
+
+  await prisma.order.update({
+    where: { orderId: searchParams.orderId },
+    data: {
+      state: 'SUCCESS',
+      paymentKey: payments.data.paymentKey,
+      receiptUrl: payments.data.receipt.url,
+      method: payments.data.method,
     },
   });
 

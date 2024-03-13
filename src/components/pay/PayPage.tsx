@@ -15,6 +15,7 @@ import Point from './coupon/Point';
 import { loadTossPayments } from '@tosspayments/payment-sdk';
 import { useToast } from '../ui/use-toast';
 import { useRouter } from 'next/navigation';
+import axios from 'axios';
 
 interface PayPageProps {
   cartItems: { cartItems: OrderProductType[]; totalPrice: number };
@@ -73,17 +74,29 @@ const PayPage = (props: PayPageProps) => {
 
   const handleSubmit = async (data: OrderType) => {
     if (!cartItems) return;
-
+    const randomId = Math.random().toString(36).slice(2);
     if (paymentPrice <= 0) {
       router.push('/payments/success');
     } else {
       const tossPayments = await loadTossPayments(
         process.env.NEXT_PUBLIC_TOSS_CLIENT_KEY as string,
       );
+      await axios.post('/api/order', {
+        ...data,
+        initialPrice: totalPrice,
+        shippingPrice,
+        cartItems,
+        applyCoupon: getCouponDiscount(),
+        applyPoint,
+        paymentPrice,
+        accuralPoint,
+        orderId: randomId,
+        orderName: `${cartItems[0].product.name}외 ${cartItems.length - 1}개의 상품`,
+      });
 
       await tossPayments.requestPayment('카드', {
         amount: paymentPrice,
-        orderId: Math.random().toString(36).slice(2),
+        orderId: randomId,
         orderName: `${cartItems[0].product.name}외 ${cartItems.length - 1}개의 상품`,
         successUrl: `${window.location.origin}/api/payments`,
         failUrl: `${window.location.origin}/api/payments/fail`,

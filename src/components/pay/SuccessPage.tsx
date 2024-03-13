@@ -6,7 +6,6 @@ import { motion } from 'framer-motion';
 
 import { Check, Home, Receipt } from 'lucide-react';
 import { Button } from '../ui/button';
-import { useRouter } from 'next/navigation';
 
 interface Payment {
   payments: {
@@ -24,7 +23,6 @@ interface Payment {
 
 const SuccessPage = (props: Payment) => {
   const { payments } = props;
-  const router = useRouter();
 
   return (
     <div className="flex min-h-screen items-center justify-center">
@@ -44,23 +42,13 @@ const SuccessPage = (props: Payment) => {
           <Check className="size-10 text-white" />
         </motion.div>
         <Confetti numberOfPieces={100} />
-        <h1 className="text-3xl font-semibold">Thank you for your purchase</h1>
+        <h1 className="text-3xl font-semibold">주문이 완료되었습니다.</h1>
         <p>{payments.orderName}</p>
         <p className="text-gray-500">Order #{payments.orderId}</p>
-        <Button
-          variant="secondary"
-          onClick={() => {
-            router.push('/');
-          }}
-        >
+        <Button variant="secondary">
           <Home size={14} className="mr-2" /> 홈페이지로 이동
         </Button>
-        <Button
-          variant="secondary"
-          onClick={() => {
-            router.push(`/orders/${payments.orderId}`);
-          }}
-        >
+        <Button variant="secondary">
           <Receipt size={16} className="mr-2" /> 주문내역으로 이동
         </Button>
       </div>

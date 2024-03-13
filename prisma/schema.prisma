@@ -59,19 +59,19 @@ model User {
 model Order {
   orderId    String      @id
   userId     String
-  paymentKey String
+  paymentKey String?
   orderName  String
-  receiptUrl String
-  method     String
+  receiptUrl String?
+  method     String?
   amount     Float
   createdAt  DateTime    @default(now())
-  state      String
+  state      String      @default("대기중")
   user       User        @relation(fields: [userId], references: [id])
   OrderForm  OrderForm[]
 }
 
 model OrderForm {
-  orderFormId    String   @id @default(cuid())
+  orderFormId    String @id @default(cuid())
   orderId        String
   name           String
   phone          String
@@ -82,8 +82,18 @@ model OrderForm {
   address        String
   detailAddress  String
   deliveryMemo   String
-  createdAt      DateTime @default(now())
-  order          Order    @relation(fields: [orderId], references: [orderId])
+
+  initialPrice   Float
+  shippingCost   Float
+  couponDiscount Float
+  pointDiscount  Float
+  finalPrice     Float
+  productsId     String[]
+
+  accuralPoint Int
+
+  createdAt DateTime @default(now())
+  order     Order    @relation(fields: [orderId], references: [orderId])
 }
 
 model Point {

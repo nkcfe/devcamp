@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { redirect } from 'next/navigation';
 import { NextRequest, NextResponse } from 'next/server';
 
@@ -25,8 +24,6 @@ export async function GET(req: NextRequest, res: NextResponse) {
       'Content-Type': 'application/json',
     },
   }).then((res) => res.json());
-  console.log('결제 성공');
-  // TODO: DB 처리
 
   redirect(`/payments/success?orderId=${orderId}`);
 }
