@@ -17,7 +17,7 @@ export async function GET() {
       select: { Point: true },
     });
 
-    return NextResponse.json(user?.Point[0].amount, { status: 200 });
+    return NextResponse.json(user?.Point?.amount, { status: 200 });
   } catch (error) {
     return NextResponse.error();
   }

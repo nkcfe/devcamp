@@ -7,7 +7,6 @@ import prisma from '@/db';
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    console.log(body);
     const { orderId, orderName, paymentPrice } = body;
     const session = await getServerSession(authOptions);
     if (!session) {
@@ -46,14 +45,14 @@ export async function POST(req: NextRequest) {
         deliveryMemo: body.deliveryMemo,
         initialPrice: body.initialPrice,
         shippingCost: body.shippingPrice,
-        couponDiscount: body.applyCoupon,
+        applyCoupon: body.applyCoupon,
         pointDiscount: body.applyPoint,
         finalPrice: body.paymentPrice,
         productsId: body.cartItems.map((item: any) => item.productId),
         accuralPoint: body.accuralPoint,
       },
     });
-
+    console.log('hi');
     if (!order || !orderForm) {
       return NextResponse.json('data error', { status: 500 });
     }
@@ -64,7 +63,4 @@ export async function POST(req: NextRequest) {
   }
 }
 
-export async function GET(req: NextRequest) {
-  
-}
-
+export async function GET(req: NextRequest) {}

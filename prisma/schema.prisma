@@ -52,7 +52,7 @@ model User {
   sessions       Session[]
   userCoupons    UserCoupon[]
   cart           Cart?
-  Point          Point[]
+  Point          Point?
   Order          Order[]
 }
 
@@ -83,12 +83,12 @@ model OrderForm {
   detailAddress  String
   deliveryMemo   String
 
-  initialPrice   Float
-  shippingCost   Float
-  couponDiscount Float
-  pointDiscount  Float
-  finalPrice     Float
-  productsId     String[]
+  initialPrice  Float
+  shippingCost  Float?
+  applyCoupon   String?
+  pointDiscount Float?
+  finalPrice    Float
+  productsId    String[]
 
   accuralPoint Int
 
@@ -98,8 +98,8 @@ model OrderForm {
 
 model Point {
   pointId   String   @id @default(cuid())
-  userId    String
-  amount    Int      @default(0)
+  userId    String   @unique
+  amount    Int
   createdAt DateTime @default(now())
   user      User     @relation(fields: [userId], references: [id])
 }

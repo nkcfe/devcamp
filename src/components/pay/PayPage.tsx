@@ -86,7 +86,7 @@ const PayPage = (props: PayPageProps) => {
         initialPrice: totalPrice,
         shippingPrice,
         cartItems,
-        applyCoupon: getCouponDiscount(),
+        applyCoupon: applyCoupon ? JSON.stringify(applyCoupon) : '',
         applyPoint,
         paymentPrice,
         accuralPoint,
@@ -98,7 +98,7 @@ const PayPage = (props: PayPageProps) => {
         amount: paymentPrice,
         orderId: randomId,
         orderName: `${cartItems[0].product.name}외 ${cartItems.length - 1}개의 상품`,
-        successUrl: `${window.location.origin}/api/payments`,
+        successUrl: `${window.location.origin}/api/payments/success`,
         failUrl: `${window.location.origin}/api/payments/fail`,
       });
     }
