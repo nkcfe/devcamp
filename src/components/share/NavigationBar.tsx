@@ -33,13 +33,14 @@ const truculenta = Truculenta({
 const NavigationBar = () => {
   const router = useRouter();
   const { status } = useSession();
-  const { cartCounts } = useCartCounts();
+  const { cartCounts, setCartCounts } = useCartCounts();
 
   const { data: cartItemCounts, refetch } = useQuery({
     queryKey: ['cartItemCounts'],
     queryFn: async () => {
       try {
         const response = await axios.get('/api/cart/count');
+        setCartCounts(response.data);
         return response.data;
       } catch (error) {
         return console.error(error);

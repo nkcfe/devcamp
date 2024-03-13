@@ -85,8 +85,8 @@ const PayPage = (props: PayPageProps) => {
         amount: paymentPrice,
         orderId: Math.random().toString(36).slice(2),
         orderName: `${cartItems[0].product.name}외 ${cartItems.length - 1}개의 상품`,
-        successUrl: `${window.location.origin}/payments/success`,
-        failUrl: `${window.location.origin}/payments/fail`,
+        successUrl: `${window.location.origin}/api/payments`,
+        failUrl: `${window.location.origin}/api/payments/fail`,
       });
     }
   };

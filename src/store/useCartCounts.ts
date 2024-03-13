@@ -2,6 +2,7 @@ import { create } from 'zustand';
 
 interface CartCounts {
   cartCounts: number;
+  setCartCounts: (cartCounts: number) => void;
   incrementCartCounts: () => void;
   decrementCartCounts: () => void;
   resetCartCounts: () => void;
@@ -9,6 +10,7 @@ interface CartCounts {
 
 export const useCartCounts = create<CartCounts>((set) => ({
   cartCounts: 0,
+  setCartCounts: (cartCounts: number) => set({ cartCounts }),
   incrementCartCounts: () =>
     set((state) => ({ cartCounts: state.cartCounts + 1 })),
   decrementCartCounts: () =>
