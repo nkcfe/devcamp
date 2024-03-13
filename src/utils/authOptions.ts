@@ -72,13 +72,21 @@ export const authOptions: NextAuthOptions = {
   },
 
   callbacks: {
-    session: ({ session, token }) => ({
-      ...session,
-      user: {
-        ...session.user,
-        id: token.sub,
-      },
-    }),
+    async session({ session, token, user }) {
+      const userPoint = await prisma.point.findFirst({
+        where: { userId: token.sub },
+      });
+      if (!userPoint) {
+        await prisma.point.create({
+          data: {
+            amount: 10000,
+            userId: token.sub as string,
+          },
+        });
+      }
+
+      return { ...session, user: { ...session.user, id: token.sub } };
+    },
 
     jwt: async ({ user, token }) => {
       if (user) {
@@ -86,21 +94,6 @@ export const authOptions: NextAuthOptions = {
       }
 
       return token;
-    },
-    async signIn({ user }) {
-      const userPoint = await prisma.point.findFirst({
-        where: { userId: user?.id },
-      });
-
-      if (!userPoint) {
-        await prisma.point.create({
-          data: {
-            amount: 10000,
-            userId: user?.id,
-          },
-        });
-      }
-      return true;
     },
   },
 };
