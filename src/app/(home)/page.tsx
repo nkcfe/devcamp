@@ -1,4 +1,4 @@
-import { getCategories, getProducts } from '../utils/fetch';
+import { getCategories, getProducts } from '../../utils/fetch';
 import Homepage from './Homepage';
 import getCurrentUser from './actions/getUser';
 

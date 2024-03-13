@@ -1,4 +1,4 @@
-import { getProduct } from '@/app/utils/fetch';
+import { getProduct } from '@/utils/fetch';
 import prisma from '@/db';
 import { notFound } from 'next/navigation';
 import DetailPage from '../../../components/detail/DetailPage';
@@ -13,7 +13,9 @@ export const generateStaticParams = async () => {
       productId: true,
     },
   });
-  return response.map(({ productId }) => ({ params: { id: productId.toString() } }));
+  return response.map(({ productId }) => ({
+    params: { id: productId.toString() },
+  }));
 };
 
 export default async function Product({ params }: ProductProps) {
