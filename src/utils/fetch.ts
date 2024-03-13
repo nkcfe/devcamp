@@ -3,6 +3,7 @@ import { cache } from 'react';
 import prisma from '@/db';
 import { authOptions } from './authOptions';
 import { getServerSession } from 'next-auth';
+import { NextResponse } from 'next/server';
 
 export const getProducts = cache(async () => {
   try {
@@ -99,5 +100,21 @@ export const getCartItems = async () => {
   } catch (error) {
     console.error(error);
     return { cartItems: [], totalPrice: 0 };
+  }
+};
+
+export const getOrderItems = async () => {
+  try {
+    const session = await getServerSession(authOptions);
+    if (!session) return;
+
+    const user = await prisma.user.findUnique({
+      where: { email: session.user?.email as string },
+      include: { Order: { include: { OrderForm: true } } },
+    });
+
+    return user?.Order;
+  } catch (error) {
+    return null;
   }
 };

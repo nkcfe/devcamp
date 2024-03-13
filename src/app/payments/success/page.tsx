@@ -56,14 +56,17 @@ export default async function Page({ searchParams }: { searchParams: any }) {
 
       // 쿠폰 사용 내역 삭제
       const coupon = JSON.parse(orderForm?.applyCoupon ?? '');
-      await prisma.userCoupon.delete({
-        where: {
-          userId_couponId: {
-            userId: user?.id as string,
-            couponId: coupon.couponId,
+
+      if (coupon) {
+        await prisma.userCoupon.delete({
+          where: {
+            userId_couponId: {
+              userId: user?.id as string,
+              couponId: coupon.couponId,
+            },
           },
-        },
-      });
+        });
+      }
       // 포인트 삭제 및 적립
       const point = await prisma.point.findFirst({
         where: { pointId: user?.Point?.pointId },
