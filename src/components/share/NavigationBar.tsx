@@ -33,14 +33,13 @@ const truculenta = Truculenta({
 const NavigationBar = () => {
   const router = useRouter();
   const { status } = useSession();
-  const { cartCounts, setCartCounts } = useCartCounts();
+  const { cartCounts } = useCartCounts();
 
   const { data: cartItemCounts, refetch } = useQuery({
     queryKey: ['cartItemCounts'],
     queryFn: async () => {
       try {
         const response = await axios.get('/api/cart/count');
-        setCartCounts(response.data);
         return response.data;
       } catch (error) {
         return console.error(error);
@@ -50,7 +49,7 @@ const NavigationBar = () => {
 
   useEffect(() => {
     refetch();
-  }, [refetch, status]);
+  }, [refetch, status, cartCounts]);
 
   return (
     <div className="fixed top-0 z-30 flex w-screen items-center justify-center bg-background/40 backdrop-blur-lg">
@@ -71,9 +70,11 @@ const NavigationBar = () => {
                 className="relative"
               >
                 <FiShoppingCart className="size-[1.2rem]" />
-                <Badge className="absolute right-[-8px] top-[-8px] size-5 justify-center rounded-full p-1">
-                  {cartCounts}
-                </Badge>
+                {cartCounts === 0 ? null : (
+                  <Badge className="absolute right-[-8px] top-[-8px] size-5 justify-center rounded-full p-1">
+                    {cartItemCounts}
+                  </Badge>
+                )}
               </Button>
               <DropdownMenu>
                 <DropdownMenuTrigger>
