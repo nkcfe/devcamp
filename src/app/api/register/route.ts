@@ -1,6 +1,6 @@
 import bcrypt from 'bcrypt';
 import { NextResponse } from 'next/server';
-
+export const dynamic = 'force-dynamic';
 import prisma from '@/db';
 
 export async function POST(request: Request) {

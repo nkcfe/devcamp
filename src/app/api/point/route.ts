@@ -1,7 +1,7 @@
 import { authOptions } from '@/utils/authOptions';
 import { getServerSession } from 'next-auth';
-import { NextRequest, NextResponse } from 'next/server';
-
+import { NextResponse } from 'next/server';
+export const dynamic = 'force-dynamic';
 import prisma from '@/db';
 
 export async function GET() {
