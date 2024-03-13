@@ -63,6 +63,8 @@ const DeliveryInfo = (props: DeliveryInfoProps) => {
     } else if (memoList.includes(OrderForm.watch().deliveryMemo)) {
       setIsDirectMessage(false);
     }
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [OrderForm.watch().deliveryMemo]);
 
   return (

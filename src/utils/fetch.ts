@@ -1,7 +1,6 @@
 import { cache } from 'react';
 
 import prisma from '@/db';
-import { getSession } from 'next-auth/react';
 import { authOptions } from './authOptions';
 import { getServerSession } from 'next-auth';
 
@@ -92,7 +91,7 @@ export const getCartItems = async () => {
     });
 
     const totalPrice = cartItems.reduce(
-      (acc, item) => acc + item.product.price,
+      (acc, item) => acc + item.product.price * item.quantity,
       0,
     );
 
