@@ -1,9 +1,12 @@
 'use client';
 
-import type { OrderForm } from '@prisma/client';
+import type { OrderForm, Product } from '@prisma/client';
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
-import Image from 'next/image';
+
+type Extend<T, U> = T & U;
+
+type OrderFormWithProducts = Extend<OrderForm, { products: Product[] }>;
 
 interface OrderPageProps {
   orders: {
@@ -16,7 +19,7 @@ interface OrderPageProps {
     amount: number;
     createdAt: Date;
     state: string;
-    OrderForm: OrderForm[];
+    OrderForm: OrderFormWithProducts[];
   }[];
 }
 

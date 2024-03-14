@@ -84,8 +84,11 @@ const NavigationBar = () => {
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
-                  <DropdownMenuItem onClick={() => router.push('/mypage')}>
+                  {/* <DropdownMenuItem onClick={() => router.push('/mypage')}>
                     My page
+                  </DropdownMenuItem> */}
+                  <DropdownMenuItem onClick={() => router.push('/order')}>
+                    Order List
                   </DropdownMenuItem>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem

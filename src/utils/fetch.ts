@@ -3,8 +3,6 @@ import { cache } from 'react';
 import prisma from '@/db';
 import { authOptions } from './authOptions';
 import { getServerSession } from 'next-auth';
-import { OrderForm } from '@prisma/client';
-import { Payment } from '@/module/type';
 
 export const getProducts = cache(async () => {
   try {
@@ -103,7 +101,6 @@ export const getCartItems = async () => {
     return { cartItems: [], totalPrice: 0 };
   }
 };
-
 export const getOrderItems = async () => {
   try {
     const session = await getServerSession(authOptions);
@@ -114,8 +111,24 @@ export const getOrderItems = async () => {
       include: { Order: { include: { OrderForm: true } } },
     });
 
-    return user?.Order;
+    const ordersWithProducts = await Promise.all(
+      user?.Order.map(async (order) => {
+        const orderFormsWithProducts = await Promise.all(
+          order.OrderForm.map(async (orderForm) => {
+            const productsId = orderForm.productsId;
+            const products = await prisma.product.findMany({
+              where: { productId: { in: productsId } },
+            });
+            return { ...orderForm, products };
+          }),
+        );
+        return { ...order, OrderForm: orderFormsWithProducts };
+      }) || [],
+    );
+
+    return ordersWithProducts;
   } catch (error) {
+    console.error(error);
     return null;
   }
 };
