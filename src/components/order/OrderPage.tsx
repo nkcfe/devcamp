@@ -1,16 +1,23 @@
 'use client';
 
-import { Order, OrderForm } from '@prisma/client';
+import type { OrderForm } from '@prisma/client';
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '../ui/card';
 import Image from 'next/image';
 
-interface OrderWithOrderForm extends Order {
-  OrderForm: OrderForm;
-}
-
 interface OrderPageProps {
-  orders: OrderWithOrderForm[];
+  orders: {
+    orderId: string;
+    userId: string;
+    paymentKey: string | null;
+    orderName: string;
+    receiptUrl: string | null;
+    method: string | null;
+    amount: number;
+    createdAt: Date;
+    state: string;
+    OrderForm: OrderForm[];
+  }[];
 }
 
 const OrderPage = (props: OrderPageProps) => {
@@ -29,7 +36,7 @@ const OrderPage = (props: OrderPageProps) => {
               </CardHeader>
               <CardContent>
                 <div className="flex">
-                  <Image width={100} height={100} className="bg-gray-500" />
+                  {/* <Image width={100} height={100} className="bg-gray-500" /> */}
                   <div className="flex flex-col">
                     <div>{new Date(order.createdAt).toDateString()}</div>
                     <div>{order.orderName}</div>

@@ -20,7 +20,6 @@ export const generateStaticParams = async () => {
 };
 
 export default async function Product({ params }: ProductProps) {
-  console.log(params.id);
   const product = await getProduct(params.id);
   if (!product) return notFound();
   return <DetailPage product={product} />;
