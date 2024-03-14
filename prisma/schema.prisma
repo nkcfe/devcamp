@@ -93,7 +93,7 @@ model OrderForm {
   accuralPoint Int
 
   createdAt DateTime @default(now())
-  order     Order    @relation(fields: [orderId], references: [orderId])
+  order     Order    @relation(fields: [orderId], references: [orderId], onDelete: Cascade)
 }
 
 model Point {

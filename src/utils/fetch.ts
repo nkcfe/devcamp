@@ -244,7 +244,7 @@ export const updateOrder = async (
     await prisma.order.update({
       where: { orderId: orderId },
       data: {
-        state: 'SUCCESS',
+        state: '결제완료',
         paymentKey: paymentKey,
         receiptUrl: receiptUrl,
         method: method,
