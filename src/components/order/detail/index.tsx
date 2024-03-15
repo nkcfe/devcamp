@@ -4,6 +4,8 @@ import { Card, CardContent } from '../../ui/card';
 import { format } from 'date-fns';
 import { Button } from '../../ui/button';
 import Summary from './Summary';
+import Image from 'next/image';
+import Products from './Products';
 
 interface OrderDetailPageProps {
   order: {
@@ -35,7 +37,7 @@ const OrderDetailPage = (props: OrderDetailPageProps) => {
             createdAt={currentOrder.createdAt}
             receiptUrl={currentOrder.receiptUrl}
           />
-          
+          <Products products={currentOrder.products} />
         </div>
       </div>
     </div>

@@ -65,16 +65,16 @@ export async function POST(req: NextRequest) {
 
 export async function GET(req: NextRequest) {}
 
-export async function Delete(req: NextRequest) {
-  const { orderId } = await req.json();
+// export async function Delete(req: NextRequest) {
+//   const { orderId } = await req.json();
 
-  try {
-    const order = await prisma.order.delete({
-      where: { orderId: orderId },
-    });
+//   try {
+//     const order = await prisma.order.delete({
+//       where: { orderId: orderId },
+//     });
 
-    return NextResponse.json('Order deleted successfully', { status: 200 });
-  } catch (error) {
-    return NextResponse.json('server error', { status: 500 });
-  }
-}
+//     return NextResponse.json('Order deleted successfully', { status: 200 });
+//   } catch (error) {
+//     return NextResponse.json('server error', { status: 500 });
+//   }
+// }
