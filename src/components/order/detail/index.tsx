@@ -1,11 +1,12 @@
 import { Order, OrderForm, Product } from '@prisma/client';
 import React from 'react';
-import { Card, CardContent } from '../../ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '../../ui/card';
 import { format } from 'date-fns';
 import { Button } from '../../ui/button';
 import Summary from './Summary';
 import Image from 'next/image';
 import Products from './Products';
+import DeliveryInfo from './DeliveryInfo';
 
 interface OrderDetailPageProps {
   order: {
@@ -38,6 +39,7 @@ const OrderDetailPage = (props: OrderDetailPageProps) => {
             receiptUrl={currentOrder.receiptUrl}
           />
           <Products products={currentOrder.products} />
+          <DeliveryInfo orderForm={currentOrder.OrderForm[0]} />
         </div>
       </div>
     </div>
