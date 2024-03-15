@@ -33,7 +33,9 @@ const OrderDetailPage = (props: OrderDetailPageProps) => {
           <Summary
             orderId={currentOrder.orderId}
             createdAt={currentOrder.createdAt}
+            receiptUrl={currentOrder.receiptUrl}
           />
+          
         </div>
       </div>
     </div>

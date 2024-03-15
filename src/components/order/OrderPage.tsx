@@ -25,7 +25,7 @@ interface OrderPageProps {
 
 const OrderPage = (props: OrderPageProps) => {
   const { orders } = props;
-
+  
   return (
     <div className="flex w-full items-center justify-center">
       <div className="mt-40 flex flex-col items-center justify-start lg:max-w-6xl">
