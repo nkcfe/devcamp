@@ -52,7 +52,7 @@ export async function POST(req: NextRequest) {
         accuralPoint: body.accuralPoint,
       },
     });
-    console.log('hi');
+
     if (!order || !orderForm) {
       return NextResponse.json('data error', { status: 500 });
     }

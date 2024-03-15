@@ -5,6 +5,7 @@ export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
     const category = searchParams.get('category') as string;
+    
 
     if (category === 'ALL PRODUCTS' || !category) {
       const response = await prisma.product.findMany({

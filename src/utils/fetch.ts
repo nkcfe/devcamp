@@ -239,7 +239,7 @@ export const updateOrder = async (
       where: { orderId: orderId },
       select: { state: true },
     });
-    console.log(paymentKey, receiptUrl, method, orderState?.state);
+
     if (orderState?.state !== '대기중') return;
     await prisma.order.update({
       where: { orderId: orderId },
@@ -253,5 +253,32 @@ export const updateOrder = async (
     return JSON.stringify({ message: 'success' });
   } catch (error) {
     return JSON.stringify({ message: 'fail' });
+  }
+};
+
+export const getOrderItem = async (orderId: string) => {
+  try {
+    const session = await getServerSession(authOptions);
+    if (!session) return;
+
+    const order = await prisma.order.findUnique({
+      where: { orderId: orderId },
+      include: { OrderForm: true },
+    });
+
+    const orderFormsWithProducts = await Promise.all(
+      order?.OrderForm.map(async (orderForm) => {
+        const productsId = orderForm.productsId;
+        const products = await prisma.product.findMany({
+          where: { productId: { in: productsId } },
+        });
+        return { ...order, products };
+      }) || [],
+    );
+
+    return orderFormsWithProducts;
+  } catch (error) {
+    console.error(error);
+    return null;
   }
 };
