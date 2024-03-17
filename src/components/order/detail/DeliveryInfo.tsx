@@ -1,6 +1,6 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '../../ui/card';
-import { OrderForm } from '@prisma/client';
+import type { OrderForm } from '@prisma/client';
 
 interface OrderDetailPageProps {
   orderForm: OrderForm;
@@ -9,7 +9,7 @@ interface OrderDetailPageProps {
 const DeliveryInfo = (props: OrderDetailPageProps) => {
   const { orderForm } = props;
   return (
-    <Card>
+    <Card className="rounded-none">
       <CardHeader className="p-4 pb-0">
         <CardTitle className="text-lg">배송지 정보</CardTitle>
       </CardHeader>
