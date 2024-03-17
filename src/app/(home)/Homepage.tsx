@@ -19,7 +19,7 @@ interface HomepageProps {
 }
 
 const Homepage = (props: HomepageProps) => {
-  const { user, products, categories } = props;
+  const { products, categories } = props;
   const [selectedCategory, setSelectedCategory] = useState('ALL PRODUCTS');
 
   const {
